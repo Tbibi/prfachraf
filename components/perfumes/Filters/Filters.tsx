@@ -17,14 +17,16 @@ const brands = [
 const olfactiveFamilies = ["Boisé", "Floral", "Ambré", "Musqué", "Frais"];
 const genders = ["Homme", "Femme", "Mixte"];
 
+type PerfumeFilters = {
+  brands: string[];
+  maxPrice: number;
+  olfactiveFamilies: string[];
+  genders: string[];
+};
+
 type FiltersProps = {
-  filters: {
-    brands: string[];
-    maxPrice: number;
-    olfactiveFamilies: string[];
-    genders: string[];
-  };
-  onFiltersChange: (filters: any) => void;
+  filters: PerfumeFilters;
+  onFiltersChange: (filters: PerfumeFilters) => void;
 };
 
 export default function Filters({ filters, onFiltersChange }: FiltersProps) {

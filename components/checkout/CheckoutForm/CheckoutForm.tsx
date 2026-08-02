@@ -4,8 +4,25 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Button from "@/components/ui/Button/Button";
 
+export type CheckoutOrderData = {
+  customer: {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email: string;
+  };
+  shipping: {
+    city: string;
+    address: string;
+    deliveryMethod: string;
+  };
+  payment: {
+    method: string;
+  };
+};
+
 type CheckoutFormProps = {
-  onSubmit: (data: any) => void;
+  onSubmit: (data: CheckoutOrderData) => void;
 };
 
 const moroccanCities = [

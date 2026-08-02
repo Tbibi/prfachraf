@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useCartStore } from "@/lib/stores/cartStore";
 
@@ -11,19 +10,7 @@ type CartIconProps = {
 
 export default function CartIcon({ onClick, className = "" }: CartIconProps) {
   const { getTotalItems, openCart } = useCartStore();
-  const [shouldBounce, setShouldBounce] = useState(false);
-  const [prevItemCount, setPrevItemCount] = useState(0);
-  
   const totalItems = getTotalItems();
-
-  // Trigger bounce animation when items are added
-  useEffect(() => {
-    if (totalItems > prevItemCount && totalItems > 0) {
-      setShouldBounce(true);
-      setTimeout(() => setShouldBounce(false), 600);
-    }
-    setPrevItemCount(totalItems);
-  }, [totalItems, prevItemCount]);
 
   const handleClick = () => {
     if (onClick) {
@@ -37,7 +24,8 @@ export default function CartIcon({ onClick, className = "" }: CartIconProps) {
     <motion.button
       type="button"
       onClick={handleClick}
-      animate={shouldBounce ? {
+      key={totalItems}
+      animate={totalItems > 0 ? {
         scale: [1, 1.2, 1],
         rotate: [0, -10, 10, -5, 0]
       } : {}}
