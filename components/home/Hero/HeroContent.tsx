@@ -12,7 +12,7 @@ type HeroContentProps = {
 
 export default function HeroContent({ slide, direction }: HeroContentProps) {
   return (
-    <div className="min-h-[34rem] max-w-3xl lg:min-h-[38rem]">
+    <div className="min-h-0 max-w-3xl lg:min-h-[38rem]">
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
           key={slide.id}
@@ -26,7 +26,7 @@ export default function HeroContent({ slide, direction }: HeroContentProps) {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.08, ease: "easeInOut" }}
-            className="mb-6 inline-flex rounded-full border border-[#588b76]/20 bg-white/50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-[#588b76] shadow-sm backdrop-blur"
+            className="mb-3 inline-flex rounded-full border border-[#588b76]/20 bg-white/50 px-3 py-1.5 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#588b76] shadow-sm backdrop-blur sm:mb-5 sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.28em] lg:mb-6"
           >
             {slide.eyebrow}
           </motion.p>
@@ -36,7 +36,7 @@ export default function HeroContent({ slide, direction }: HeroContentProps) {
             initial={{ opacity: 0, y: 30, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.16, ease: "easeInOut" }}
-            className="font-serif text-5xl font-semibold leading-[0.95] tracking-[-0.05em] text-[#1e2a25] sm:text-6xl md:text-7xl lg:text-8xl"
+            className="font-serif text-[clamp(2.15rem,12vw,3.45rem)] font-semibold leading-[0.92] tracking-[-0.055em] text-[#1e2a25] sm:text-6xl md:text-7xl lg:text-8xl"
           >
             {slide.title}
           </motion.h1>
@@ -45,7 +45,7 @@ export default function HeroContent({ slide, direction }: HeroContentProps) {
             initial={{ opacity: 0, y: 25, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.24, ease: "easeInOut" }}
-            className="mt-7 max-w-2xl text-base leading-8 text-[var(--color-muted)] sm:text-lg lg:text-xl lg:leading-9"
+            className="mt-3 max-w-2xl text-sm leading-6 text-[var(--color-muted)] sm:mt-6 sm:text-lg sm:leading-8 lg:mt-7 lg:text-xl lg:leading-9"
           >
             {slide.description}
           </motion.p>
@@ -54,7 +54,7 @@ export default function HeroContent({ slide, direction }: HeroContentProps) {
             initial={{ opacity: 0, y: 25, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.32, ease: "easeInOut" }}
-            className="mt-10"
+            className="mt-4 sm:mt-8 lg:mt-10"
           >
             <HeroButtons slide={slide} />
           </motion.div>
@@ -63,7 +63,7 @@ export default function HeroContent({ slide, direction }: HeroContentProps) {
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeInOut" }}
-            className="mt-12"
+            className="mt-8 hidden sm:block lg:mt-12"
           >
             <HeroStats stats={slide.stats} />
           </motion.div>

@@ -71,7 +71,6 @@ export default function CheckoutPage() {
 
   const handleOrderSubmit = (data: OrderData) => {
     setOrderData(data);
-    console.log("Order submitted:", { ...data, items: orderItems, total });
     // Handle order submission logic here
     alert("Commande confirmée ! Vous recevrez un SMS de confirmation.");
   };
@@ -80,7 +79,7 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-text)]">
       <Navbar />
       <main>
-        <section className="px-4 pt-8 pb-20 sm:px-6 sm:pt-12 sm:pb-24 lg:px-8 lg:pt-16 lg:pb-32">
+        <section className="px-4 pb-16 pt-6 sm:px-6 sm:pb-24 sm:pt-12 lg:px-8 lg:pt-16 lg:pb-32">
           <Container>
             <Breadcrumb 
               items={[
@@ -90,8 +89,8 @@ export default function CheckoutPage() {
               ]}
             />
 
-            <div className="mt-8">
-              <h1 className="font-serif text-4xl font-semibold text-[#1e2a25] lg:text-5xl">
+            <div className="mt-6 sm:mt-8">
+              <h1 className="font-serif text-3xl font-semibold text-[#1e2a25] sm:text-4xl lg:text-5xl">
                 Finaliser la commande
               </h1>
               <p className="mt-2 text-[var(--color-muted)]">
@@ -99,7 +98,7 @@ export default function CheckoutPage() {
               </p>
             </div>
 
-            <div className="mt-12 grid gap-12 lg:grid-cols-[2fr_1fr] lg:gap-16">
+            <div className="mt-8 grid gap-8 sm:mt-12 sm:gap-12 lg:grid-cols-[2fr_1fr] lg:gap-16">
               <CheckoutForm onSubmit={handleOrderSubmit} />
               <OrderSummary 
                 items={orderItems}

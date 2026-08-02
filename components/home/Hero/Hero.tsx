@@ -52,7 +52,7 @@ export default function Hero() {
       aria-labelledby="hero-title"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className="relative isolate overflow-hidden px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-32"
+      className="relative isolate overflow-hidden px-4 py-8 sm:px-6 sm:py-16 lg:px-8 lg:py-32"
     >
       <motion.div
         key={activeSlide.id}
@@ -73,7 +73,7 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      <div className="mx-auto grid max-w-[1440px] items-center gap-14 lg:grid-cols-[1.02fr_0.98fr] lg:gap-20">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-[minmax(0,1fr)_minmax(8.5rem,42vw)] items-center gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(16rem,0.85fr)] sm:gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:gap-20">
         <HeroContent slide={activeSlide} direction={direction} />
         <HeroImage
           slide={activeSlide}
@@ -84,7 +84,7 @@ export default function Hero() {
         />
       </div>
 
-      <div className="mx-auto mt-12 flex max-w-[1440px] flex-col gap-6 lg:mt-8">
+      <div className="mx-auto mt-6 flex max-w-[1440px] flex-col gap-4 sm:mt-8 sm:gap-6 lg:mt-8">
         <div className="h-px overflow-hidden rounded-full bg-[#1e2a25]/10">
           <motion.div
             key={activeSlide.id}
@@ -96,7 +96,7 @@ export default function Hero() {
           />
         </div>
 
-        <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center sm:gap-5">
           <div className="flex items-center gap-5">
             <div className="font-serif text-lg font-semibold text-[#1e2a25]">
               {String(activeIndex + 1).padStart(2, "0")}
@@ -125,7 +125,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="hidden items-center gap-3 sm:flex">
             <button
               type="button"
               onClick={goToPrevious}
