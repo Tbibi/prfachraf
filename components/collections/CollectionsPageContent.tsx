@@ -189,7 +189,10 @@ export default function CollectionsPageContent() {
                         {collection.notes}
                       </p>
                       <p className="mt-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#588b76]">
-                        {collection.productCount} {collection.productCount === 1 ? 'fragrance' : 'fragrances'}
+                        {collection.productCount}{" "}
+                        {Number(collection.productCount) === 1
+                          ? "fragrance"
+                          : "fragrances"}
                       </p>
                     </div>
                     
