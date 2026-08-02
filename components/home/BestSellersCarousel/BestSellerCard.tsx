@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { BestSellerProduct } from "./bestSellerProducts";
 import AddToCartButton from "@/components/cart/AddToCartButton/AddToCartButton";
+import { Link } from "@/i18n/navigation";
 
 type BestSellerCardProps = {
   product: BestSellerProduct;
@@ -149,13 +150,16 @@ export default function BestSellerCard({ product, index }: BestSellerCardProps) 
       </div>
 
       {/* Product Details Link Overlay */}
-      <a
-        href={`/perfumes/${product.id}`}
+      <Link
+        href={{
+          pathname: "/perfumes/[slug]",
+          params: { slug: product.id },
+        }}
         className="absolute inset-0 z-10"
         aria-label={`Voir les détails de ${product.name}`}
       >
         <span className="sr-only">Voir les détails</span>
-      </a>
+      </Link>
 
       {/* Make WhatsApp button clickable above the overlay */}
       <div className="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6 z-20 pointer-events-none">

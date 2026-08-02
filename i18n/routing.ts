@@ -52,6 +52,5 @@ export const routing = defineRouting({
       en: "/checkout",
       ar: "/checkout",
     },
-    "/products/[slug]": "/products/[slug]",
   },
 });
