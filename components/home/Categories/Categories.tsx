@@ -1,7 +1,12 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import CategoryCard from "./CategoryCard";
 import { categories } from "./categories";
 
 export default function Categories() {
+  const t = useTranslations("Home");
+
   return (
     <section
       id="collections"
@@ -12,18 +17,17 @@ export default function Categories() {
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#588b76]">
-              Collections
+              {t("categoriesEyebrow")}
             </p>
             <h2
               id="categories-title"
               className="mt-4 font-serif text-4xl font-semibold tracking-[-0.04em] text-[#1e2a25] sm:text-5xl lg:text-6xl"
             >
-              Trouvez votre signature olfactive
+              {t("categoriesTitle")}
             </h2>
           </div>
           <p className="max-w-xl text-base leading-8 text-[var(--color-muted)] sm:text-lg">
-            Des univers parfumés pensés pour chaque style, chaque saison et
-            chaque moment important.
+            {t("categoriesDescription")}
           </p>
         </div>
 

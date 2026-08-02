@@ -104,7 +104,7 @@ export const seoPages = {
     keywords: ["collections parfum", "parfum oriental", "parfum boisé", "parfum niche"],
   },
   about: {
-    path: "/a-propos",
+    path: "/about",
     title: "À propos",
     description:
       "Découvrez l'histoire d'Achraf Parfums, une maison dédiée aux sillages élégants, authentiques et accessibles.",

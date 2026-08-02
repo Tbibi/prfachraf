@@ -1,13 +1,25 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
+import { usePathname } from "@/i18n/navigation";
 import { useCartStore } from "@/lib/stores/cartStore";
 
+const hiddenRoutes = ["/cart", "/checkout"];
+
 export default function FloatingCart() {
+  const t = useTranslations("Cart");
+  const tCommon = useTranslations("Common");
+  const pathname = usePathname();
   const { isFloatingVisible, getTotalItems, getTotalPrice, openCart } = useCartStore();
-  
+
   const totalItems = getTotalItems();
   const totalPrice = getTotalPrice();
+  const plural = totalItems !== 1 ? "s" : "";
+
+  if (hiddenRoutes.includes(pathname)) {
+    return null;
+  }
 
   if (!isFloatingVisible || totalItems === 0) {
     return null;
@@ -49,18 +61,17 @@ export default function FloatingCart() {
             </svg>
             
             {/* Badge */}
-            <div className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-white text-xs font-bold text-[#588b76]">
-              {totalItems > 9 ? '9+' : totalItems}
+            <div className="absolute -top-2 -end-2 flex h-4 w-4 items-center justify-center rounded-full bg-white text-xs font-bold text-[#588b76]">
+              {totalItems > 9 ? "9+" : totalItems}
             </div>
           </div>
 
-          {/* Text */}
           <div className="text-white">
             <div className="text-sm font-semibold">
-              {totalItems} article{totalItems !== 1 ? 's' : ''}
+              {t("itemsShort", { count: totalItems, plural })}
             </div>
             <div className="text-xs opacity-90">
-              {totalPrice} DH
+              {totalPrice} {tCommon("currency")}
             </div>
           </div>
 

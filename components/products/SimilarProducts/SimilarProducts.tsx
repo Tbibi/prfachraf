@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import ProductCard from "@/components/perfumes/ProductCard/ProductCard";
 import { perfumes, PerfumeProduct } from "@/components/perfumes/ProductGrid/products";
 
@@ -9,11 +10,13 @@ type SimilarProductsProps = {
 };
 
 export default function SimilarProducts({ currentProduct }: SimilarProductsProps) {
-  // Filter similar products based on category and exclude current product
+  const t = useTranslations("Product");
   const similarProducts = perfumes
-    .filter(product => 
-      product.id !== currentProduct.id && 
-      (product.category === currentProduct.category || product.brand === currentProduct.brand)
+    .filter(
+      (product) =>
+        product.id !== currentProduct.id &&
+        (product.category === currentProduct.category ||
+          product.brand === currentProduct.brand)
     )
     .slice(0, 4);
 
@@ -24,15 +27,9 @@ export default function SimilarProducts({ currentProduct }: SimilarProductsProps
   return (
     <section className="space-y-8">
       <div className="text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#588b76]">
-          Recommandations
-        </p>
         <h2 className="mt-2 font-serif text-3xl font-semibold tracking-[-0.04em] text-[#1e2a25] sm:text-4xl">
-          Produits similaires
+          {t("similar")}
         </h2>
-        <p className="mt-4 text-[var(--color-muted)]">
-          Découvrez d&apos;autres fragrances qui pourraient vous plaire
-        </p>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

@@ -5,6 +5,7 @@ import DesktopMenu from "./DesktopMenu";
 import Logo from "./Logo";
 import MobileMenu from "./MobileMenu";
 import CartIcon from "@/components/cart/CartIcon/CartIcon";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,6 +35,7 @@ export default function Navbar() {
         <Logo />
         <DesktopMenu />
         <div className="flex items-center gap-3">
+          <LanguageSwitcher variant="desktop" />
           <CartIcon />
           <MobileMenu />
         </div>

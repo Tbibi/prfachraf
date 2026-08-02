@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import HeroContent from "./HeroContent";
 import HeroImage from "./HeroImage";
 import { heroSlides } from "./heroSlides";
 
 export default function Hero() {
+  const t = useTranslations("Hero");
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
@@ -65,7 +67,7 @@ export default function Hero() {
       />
       <motion.div
         key={`${activeSlide.id}-accent`}
-        className="absolute left-1/2 top-20 -z-10 h-72 w-72 -translate-x-1/2 rounded-full blur-3xl lg:h-[34rem] lg:w-[34rem]"
+        className="absolute start-1/2 top-20 -z-10 h-72 w-72 -translate-x-1/2 rounded-full blur-3xl lg:h-[34rem] lg:w-[34rem]"
         style={{ backgroundColor: `${activeSlide.accent}22` }}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -99,20 +101,22 @@ export default function Hero() {
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center sm:gap-5">
           <div className="flex items-center gap-5">
             <div className="font-serif text-lg font-semibold text-[#1e2a25]">
-              {String(activeIndex + 1).padStart(2, "0")}
-              <span className="mx-2 text-[var(--color-muted)]">/</span>
-              {String(heroSlides.length).padStart(2, "0")}
+              {t("slideNumber", {
+                current: String(activeIndex + 1).padStart(2, "0"),
+                total: String(heroSlides.length).padStart(2, "0"),
+              })}
             </div>
 
-            <div className="flex items-center gap-3" aria-label="Navigation des slides">
+            <div className="flex items-center gap-3" aria-label={t("next")}>
               {heroSlides.map((slide, index) => {
                 const isActive = index === activeIndex;
+                const slideTitle = t(`slides.${slide.id}.title`);
 
                 return (
                   <button
                     key={slide.id}
                     type="button"
-                    aria-label={`Afficher ${slide.title}`}
+                    aria-label={slideTitle}
                     aria-current={isActive ? "true" : undefined}
                     onClick={() => goToSlide(index)}
                     className={`h-3 rounded-full transition-all duration-300 ease-in-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#588b76] ${
@@ -130,7 +134,7 @@ export default function Hero() {
               type="button"
               onClick={goToPrevious}
               className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#588b76]/25 bg-white/60 text-[#588b76] shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#588b76]"
-              aria-label="Slide précédent"
+              aria-label={t("prev")}
             >
               ←
             </button>
@@ -138,7 +142,7 @@ export default function Hero() {
               type="button"
               onClick={goToNext}
               className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#588b76] text-white shadow-[0_14px_34px_rgba(88,139,118,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#4d7c69] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#588b76]"
-              aria-label="Slide suivant"
+              aria-label={t("next")}
             >
               →
             </button>

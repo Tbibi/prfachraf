@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 const brands = [
   "Achraf Signature",
   "Maison Florale",
@@ -32,6 +34,7 @@ type DesktopFiltersProps = {
 };
 
 export default function DesktopFilters({ filters, onFiltersChange, onReset }: DesktopFiltersProps) {
+  const t = useTranslations("Perfumes");
   const handleBrandChange = (brand: string, checked: boolean) => {
     const newBrands = checked
       ? [...filters.brands, brand]
@@ -63,9 +66,7 @@ export default function DesktopFilters({ filters, onFiltersChange, onReset }: De
         {/* Header */}
         <div className="flex items-center justify-between gap-4 border-b border-[#1e2a25]/10 pb-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#588b76]">
-              Filtres
-            </p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#588b76]">{t("filters")}</p>
             <h2 className="mt-1 font-serif text-xl font-semibold text-[#1e2a25]">
               Affiner
             </h2>
@@ -75,7 +76,7 @@ export default function DesktopFilters({ filters, onFiltersChange, onReset }: De
             onClick={onReset}
             className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-muted)] transition-colors duration-300 hover:text-[#588b76]"
           >
-            Reset
+            {t("clearFilters")}
           </button>
         </div>
 

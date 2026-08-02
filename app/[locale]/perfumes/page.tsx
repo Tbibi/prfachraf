@@ -1,5 +1,6 @@
 import PerfumesPage from "./PerfumesPage";
 import { generateCollectionMetadataFromSearchParams } from "@/lib/seo/generateMetadata";
+import { setRequestLocale } from "next-intl/server";
 
 type PerfumesSearchParams = {
   category?: string | string[];
@@ -7,6 +8,7 @@ type PerfumesSearchParams = {
 };
 
 type PerfumesRouteProps = {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<PerfumesSearchParams>;
 };
 
@@ -18,13 +20,25 @@ const getSearchParamValue = (value: string | string[] | undefined) => {
   return value ?? "";
 };
 
-export async function generateMetadata({ searchParams }: PerfumesRouteProps) {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: PerfumesRouteProps) {
+  const { locale } = await params;
   const resolvedSearchParams = await searchParams;
-  return generateCollectionMetadataFromSearchParams(resolvedSearchParams);
+  return generateCollectionMetadataFromSearchParams(
+    resolvedSearchParams,
+    locale
+  );
 }
 
-export default async function PerfumesRoute({ searchParams }: PerfumesRouteProps) {
+export default async function PerfumesRoute({
+  params,
+  searchParams,
+}: PerfumesRouteProps) {
+  const { locale } = await params;
   const resolvedSearchParams = await searchParams;
+  setRequestLocale(locale);
 
   return (
     <PerfumesPage

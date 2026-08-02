@@ -1,15 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
-
-const footerLinks = [
-  { href: "/", label: "Accueil" },
-  { href: "/parfums", label: "Parfums" },
-  { href: "/collections", label: "Collections" },
-  { href: "/a-propos", label: "À propos" },
-  { href: "/contact", label: "Contact" },
-];
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 const socialLinks = [
   { href: "https://www.instagram.com/", label: "Instagram" },
@@ -17,11 +10,20 @@ const socialLinks = [
   { href: "https://www.tiktok.com/", label: "TikTok" },
 ];
 
-const whatsappMessage = encodeURIComponent(
-  "Bonjour Achraf Parfums, je souhaite passer une commande."
-);
-
 export default function Footer() {
+  const t = useTranslations("Footer");
+  const tNav = useTranslations("Navbar");
+
+  const footerLinks = [
+    { href: "/" as const, label: tNav("home") },
+    { href: "/perfumes" as const, label: tNav("perfumes") },
+    { href: "/collections" as const, label: tNav("collections") },
+    { href: "/about" as const, label: tNav("about") },
+    { href: "/contact" as const, label: tNav("contact") },
+  ];
+
+  const whatsappMessage = encodeURIComponent(t("whatsappMessage"));
+
   return (
     <footer className="relative overflow-hidden bg-[#17231f] px-4 pt-10 text-white sm:px-6 sm:pt-16 lg:px-8 lg:pt-20">
       <div
@@ -40,7 +42,7 @@ export default function Footer() {
           <div>
             <Link
               href="/"
-              aria-label="Achraf Parfums accueil"
+              aria-label={t("homeAria")}
               className="inline-flex flex-col text-[#f6f6df] transition-opacity duration-300 hover:opacity-80"
             >
               <span className="font-serif text-3xl font-semibold leading-none tracking-[0.04em] sm:text-4xl">
@@ -51,8 +53,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-4 max-w-md text-sm leading-6 text-white/68 sm:mt-6 sm:leading-7">
-              Une maison de parfums premium au Maroc, dédiée aux fragrances
-              authentiques, élégantes et mémorables.
+              {t("description")}
             </p>
             <a
               href={`https://wa.me/?text=${whatsappMessage}`}
@@ -60,15 +61,18 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="mt-5 inline-flex items-center justify-center rounded-full bg-[#588b76] px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-white shadow-[0_16px_40px_rgba(88,139,118,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#f6f6df] hover:text-[#17231f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6f6df] sm:mt-8 sm:px-6 sm:py-3"
             >
-              WhatsApp
+              {t("whatsapp")}
             </a>
           </div>
 
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-[#f6f6df]">
-              Liens
+              {t("links")}
             </h2>
-            <nav className="mt-4 flex flex-col gap-2 sm:mt-6 sm:gap-3" aria-label="Footer navigation">
+            <nav
+              className="mt-4 flex flex-col gap-2 sm:mt-6 sm:gap-3"
+              aria-label={t("links")}
+            >
               {footerLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -83,7 +87,7 @@ export default function Footer() {
 
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-[#f6f6df]">
-              Contact
+              {t("contact")}
             </h2>
             <address className="mt-4 space-y-2 text-sm not-italic text-white/66 sm:mt-6 sm:space-y-3">
               <p>Maroc</p>
@@ -93,7 +97,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="block transition-colors duration-300 hover:text-[#f6f6df]"
               >
-                WhatsApp commande
+                {t("whatsappOrder")}
               </a>
               <a
                 href="mailto:contact@achrafparfums.ma"
@@ -106,7 +110,7 @@ export default function Footer() {
 
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-[#f6f6df]">
-              Social
+              {t("social")}
             </h2>
             <div className="mt-4 flex flex-col gap-2 sm:mt-6 sm:gap-3">
               {socialLinks.map((social) => (
@@ -125,8 +129,7 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col gap-2 py-5 text-xs text-white/48 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-7">
-          <p>© 2026 Achraf Parfums. Tous droits réservés.</p>
-          <p>Parfums premium au Maroc.</p>
+          <p>{t("copyright", { year: 2026 })}</p>
         </div>
       </motion.div>
     </footer>

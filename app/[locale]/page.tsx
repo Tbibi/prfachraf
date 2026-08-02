@@ -6,11 +6,22 @@ import WhatsAppCTA from "@/components/home/WhatsAppCTA/WhatsAppCTA";
 import WhyChooseUs from "@/components/home/WhyChooseUs/WhyChooseUs";
 import Footer from "@/components/layout/Footer/Footer";
 import Navbar from "@/components/layout/navbar/Navbar";
-import { generatePageMetadata } from "@/lib/seo/generateMetadata";
+import { generateLocalizedPageMetadata } from "@/lib/seo/localizedMetadata";
+import { setRequestLocale } from "next-intl/server";
 
-export const metadata = generatePageMetadata("home");
+type HomePageProps = {
+  params: Promise<{ locale: string }>;
+};
 
-export default function Home() {
+export async function generateMetadata({ params }: HomePageProps) {
+  const { locale } = await params;
+  return generateLocalizedPageMetadata(locale, "home");
+}
+
+export default async function Home({ params }: HomePageProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   return (
     <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-text)]">
       <Navbar />

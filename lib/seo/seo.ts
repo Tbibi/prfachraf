@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { seoConfig } from "./config";
+import { locales, type AppLocale } from "@/i18n/routing";
 
 type RobotsConfig = {
   index?: boolean;
@@ -14,6 +15,14 @@ export type SeoInput = {
   image?: string;
   type?: "website" | "article";
   robots?: RobotsConfig;
+  locale?: string;
+  languages?: Record<string, string>;
+};
+
+const openGraphLocales: Record<AppLocale, string> = {
+  fr: "fr_MA",
+  en: "en_US",
+  ar: "ar_MA",
 };
 
 const trimSlashes = (value: string) => value.replace(/^\/+|\/+$/g, "");
@@ -41,10 +50,16 @@ export function createSeoMetadata({
   image = seoConfig.defaultImage,
   type = "website",
   robots = { index: true, follow: true },
+  locale = "fr",
+  languages,
 }: SeoInput): Metadata {
   const canonical = getAbsoluteUrl(path);
   const imageUrl = getAbsoluteUrl(image);
   const mergedKeywords = [...seoConfig.defaultKeywords, ...keywords];
+  const appLocale = (locales.includes(locale as AppLocale) ? locale : "fr") as AppLocale;
+  const languageAlternates =
+    languages ??
+    Object.fromEntries(locales.map((item) => [item, getAbsoluteUrl(`/${item}`)]));
 
   return {
     metadataBase: new URL(seoConfig.siteUrl),
@@ -56,6 +71,11 @@ export function createSeoMetadata({
     publisher: seoConfig.publisher,
     alternates: {
       canonical,
+      languages: {
+        ...languageAlternates,
+        "x-default":
+          languageAlternates.fr ?? languageAlternates["fr"] ?? getAbsoluteUrl("/fr"),
+      },
     },
     robots: {
       index: robots.index ?? true,
@@ -73,7 +93,7 @@ export function createSeoMetadata({
       description,
       url: canonical,
       siteName: seoConfig.siteName,
-      locale: seoConfig.locale,
+      locale: openGraphLocales[appLocale],
       type,
       images: [
         {

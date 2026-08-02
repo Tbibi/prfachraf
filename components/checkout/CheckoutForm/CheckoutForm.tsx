@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button/Button";
 
 export type CheckoutOrderData = {
@@ -34,6 +35,7 @@ const moroccanCities = [
 ];
 
 export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
+  const t = useTranslations("Checkout");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -114,13 +116,13 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
       {/* Customer Information */}
       <div className="rounded-[2rem] border border-[#1e2a25]/10 bg-white/60 backdrop-blur-sm p-6">
         <h2 className="mb-6 font-serif text-xl font-semibold text-[#1e2a25]">
-          Informations personnelles
+          {t("customerTitle")}
         </h2>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="firstName" className="mb-2 block text-sm font-medium text-[#1e2a25]">
-              Prénom <span className="text-red-500">*</span>
+              {t("firstName")} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -141,7 +143,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
 
           <div>
             <label htmlFor="lastName" className="mb-2 block text-sm font-medium text-[#1e2a25]">
-              Nom <span className="text-red-500">*</span>
+              {t("lastName")} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -202,13 +204,13 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
       {/* Shipping Information */}
       <div className="rounded-[2rem] border border-[#1e2a25]/10 bg-white/60 backdrop-blur-sm p-6">
         <h2 className="mb-6 font-serif text-xl font-semibold text-[#1e2a25]">
-          Adresse de livraison
+          {t("shippingTitle")}
         </h2>
 
         <div className="grid gap-4">
           <div>
             <label htmlFor="city" className="mb-2 block text-sm font-medium text-[#1e2a25]">
-              Ville <span className="text-red-500">*</span>
+              {t("city")} <span className="text-red-500">*</span>
             </label>
             <select
               id="city"
@@ -234,7 +236,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
 
           <div>
             <label htmlFor="address" className="mb-2 block text-sm font-medium text-[#1e2a25]">
-              Adresse complète <span className="text-red-500">*</span>
+              {t("address")} <span className="text-red-500">*</span>
             </label>
             <textarea
               id="address"
@@ -270,7 +272,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 className="h-4 w-4 text-[#588b76] focus:ring-[#588b76]"
               />
               <div className="flex-1">
-                <div className="font-medium text-[#1e2a25]">Livraison standard</div>
+                <div className="font-medium text-[#1e2a25]">{t("deliveryStandard")}</div>
                 <div className="text-sm text-[var(--color-muted)]">2-4 jours ouvrables • 30 DH (Gratuite dès 300 DH)</div>
               </div>
             </label>
@@ -285,7 +287,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 className="h-4 w-4 text-[#588b76] focus:ring-[#588b76]"
               />
               <div className="flex-1">
-                <div className="font-medium text-[#1e2a25]">Livraison express</div>
+                <div className="font-medium text-[#1e2a25]">{t("deliveryExpress")}</div>
                 <div className="text-sm text-[var(--color-muted)]">24-48h • 50 DH</div>
               </div>
             </label>
@@ -310,7 +312,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
               className="h-4 w-4 text-[#588b76] focus:ring-[#588b76]"
             />
             <div className="flex-1">
-              <div className="font-medium text-[#1e2a25]">Paiement à la livraison</div>
+              <div className="font-medium text-[#1e2a25]">{t("paymentCod")}</div>
               <div className="text-sm text-[var(--color-muted)]">Payez en espèces lors de la réception</div>
             </div>
             <span className="text-2xl">💸</span>
@@ -342,7 +344,9 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
           loading={isSubmitting}
           className="min-w-[200px] h-14 text-base font-semibold"
         >
-          {formData.paymentMethod === "whatsapp" ? "Finaliser sur WhatsApp" : "Confirmer la commande"}
+          {formData.paymentMethod === "whatsapp"
+            ? t("whatsappFinalize")
+            : t("confirm")}
         </Button>
       </div>
     </motion.form>

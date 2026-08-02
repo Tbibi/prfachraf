@@ -16,23 +16,23 @@ import { createProductBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createProductSchema } from "@/lib/seo/jsonld";
 
 type ProductPageProps = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 };
 
 export async function generateMetadata({ params }: ProductPageProps) {
-  const resolvedParams = await params;
-  const product = perfumes.find(p => p.id === resolvedParams.slug);
+  const { locale, slug } = await params;
+  const product = perfumes.find((p) => p.id === slug);
 
   if (!product) {
-    return generateNotFoundMetadata();
+    return generateNotFoundMetadata(locale);
   }
 
-  return generateProductMetadata(product);
+  return generateProductMetadata(product, locale);
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const resolvedParams = await params;
-  const product = perfumes.find(p => p.id === resolvedParams.slug);
+  const { slug } = await params;
+  const product = perfumes.find((p) => p.id === slug);
 
   if (!product) {
     notFound();

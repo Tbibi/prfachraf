@@ -9,6 +9,7 @@ export type CartItem = {
   image: string;
   quantity: number;
   volume?: string;
+  originalPrice?: number;
   tone: {
     primary: string;
     secondary: string;

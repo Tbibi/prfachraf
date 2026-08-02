@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useCartStore, CartItem } from "@/lib/stores/cartStore";
 import { useToastStore } from "@/components/ui/Toast/Toast";
 import Button from "@/components/ui/Button/Button";
@@ -12,6 +13,8 @@ type AddToCartButtonProps = {
     name: string;
     brand: string;
     price: string;
+    image?: string;
+    oldPrice?: string;
     tone: {
       primary: string;
       secondary: string;
@@ -34,6 +37,7 @@ export default function AddToCartButton({
   size = "md",
   showMiniCart = true
 }: AddToCartButtonProps) {
+  const t = useTranslations("Product");
   const [isAdding, setIsAdding] = useState(false);
   const { addItem, openCart } = useCartStore();
   const { addToast } = useToastStore();
@@ -43,17 +47,19 @@ export default function AddToCartButton({
     
     setIsAdding(true);
     
-    // Extract numeric price
-    const numericPrice = parseInt(product.price.replace(/\D/g, ""));
-    
-    // Create cart item
-    const cartItem: Omit<CartItem, 'quantity'> = {
+    const numericPrice = parseInt(product.price.replace(/\D/g, ""), 10);
+    const numericOldPrice = product.oldPrice
+      ? parseInt(product.oldPrice.replace(/\D/g, ""), 10)
+      : undefined;
+
+    const cartItem: Omit<CartItem, "quantity"> = {
       id: volume ? `${product.id}-${volume}` : product.id,
       name: product.name,
       brand: product.brand,
       price: numericPrice,
-      image: "", // Will be generated dynamically
+      image: product.image ?? "",
       volume,
+      originalPrice: numericOldPrice,
       tone: product.tone,
     };
 
@@ -62,9 +68,9 @@ export default function AddToCartButton({
     
     // Show success toast
     addToast({
-      type: 'success',
-      message: `${product.name} ajouté au panier`,
-      duration: 2000
+      type: "success",
+      message: `${product.name} — ${t("added")}`,
+      duration: 2000,
     });
 
     // Brief loading state for visual feedback
@@ -106,7 +112,7 @@ export default function AddToCartButton({
             className="flex items-center gap-2"
           >
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-            <span>Ajout en cours...</span>
+            <span>{t("adding")}</span>
           </motion.div>
         ) : (
           children || (
@@ -116,7 +122,7 @@ export default function AddToCartButton({
               transition={{ duration: 0.2 }}
             >
               <span>🛍️</span>
-              <span>Ajouter au panier</span>
+              <span>{t("addToCart")}</span>
             </motion.div>
           )
         )}

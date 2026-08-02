@@ -1,66 +1,85 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import Breadcrumb from "@/components/ui/Breadcrumb/Breadcrumb";
 import Container from "@/components/ui/Container/Container";
 import { perfumes } from "@/components/perfumes/ProductGrid/products";
 
 const collections = [
   {
-    title: "Homme",
-    href: "/perfumes?category=homme",
-    description: "Bois secs, ambres profonds et sillages affirmés.",
+    id: "homme",
+    href: { pathname: "/perfumes" as const, query: { category: "homme" } },
     accent: "#588b76",
     image: "from-[#588b76]/25 via-[#f6f6df] to-white",
   },
   {
-    title: "Femme",
-    href: "/perfumes?category=femme",
-    description: "Fleurs lumineuses, muscs soyeux et vanilles élégantes.",
+    id: "femme",
+    href: { pathname: "/perfumes" as const, query: { category: "femme" } },
     accent: "#b9868f",
     image: "from-[#b9868f]/25 via-[#fff5f1] to-white",
   },
   {
-    title: "Oriental",
-    href: "/perfumes?category=oriental",
-    description: "Résines, épices et matières précieuses au caractère enveloppant.",
+    id: "oriental",
+    href: { pathname: "/perfumes" as const, query: { category: "oriental" } },
     accent: "#9b6b45",
     image: "from-[#9b6b45]/25 via-[#f6f6df] to-white",
   },
   {
-    title: "Boisé",
-    href: "/perfumes?category=boise",
-    description: "Cèdre, santal, vétiver et signatures très couture.",
+    id: "boise",
+    href: { pathname: "/perfumes" as const, query: { category: "boise" } },
     accent: "#2f463f",
     image: "from-[#2f463f]/25 via-[#edf4ec] to-white",
   },
   {
-    title: "Niche",
-    href: "/perfumes?category=niche",
-    description: "Créations rares pour les amateurs de parfums distinctifs.",
+    id: "niche",
+    href: { pathname: "/perfumes" as const, query: { category: "niche" } },
     accent: "#d7a85e",
     image: "from-[#d7a85e]/25 via-[#fff8e6] to-white",
   },
   {
-    title: "Best Sellers",
-    href: "/perfumes?sort=bestseller",
-    description: "Les parfums favoris de nos clients, choisis pour leur tenue.",
+    id: "bestseller",
+    href: { pathname: "/perfumes" as const, query: { sort: "bestseller" } },
     accent: "#815838",
     image: "from-[#815838]/25 via-[#f4ead8] to-white",
   },
   {
-    title: "New Arrivals",
-    href: "/perfumes?sort=newest",
-    description: "Les dernières nouveautés premium sélectionnées pour la saison.",
+    id: "newest",
+    href: { pathname: "/perfumes" as const, query: { sort: "newest" } },
     accent: "#b9868f",
     image: "from-[#b9868f]/25 via-[#fff5f1] to-white",
   },
-];
+] as const;
 
 const featuredProducts = perfumes.slice(0, 8);
 
 export default function CollectionsPageContent() {
+  const t = useTranslations("Collections");
+  const tHome = useTranslations("Home");
+  const tCommon = useTranslations("Common");
+  const tCart = useTranslations("Cart");
+
+  const titleMap: Record<(typeof collections)[number]["id"], string> = {
+    homme: tHome("categoryHommeTitle"),
+    femme: tHome("categoryFemmeTitle"),
+    oriental: tHome("categoryOriental"),
+    boise: tHome("categoryBoiseTitle"),
+    niche: tHome("categoryNiche"),
+    bestseller: tHome("categoryBestsellersTitle"),
+    newest: tHome("categoryNouveautesTitle"),
+  };
+
+  const descMap: Record<(typeof collections)[number]["id"], string> = {
+    homme: tHome("categoryHommeDesc"),
+    femme: tHome("categoryFemmeDesc"),
+    oriental: t("description"),
+    boise: tHome("categoryBoiseDesc"),
+    niche: t("description"),
+    bestseller: tHome("categoryBestsellersDesc"),
+    newest: tHome("categoryNouveautesDesc"),
+  };
+
   return (
     <>
       <section className="relative overflow-hidden px-4 pb-20 pt-12 sm:px-6 sm:pb-24 sm:pt-16 lg:px-8 lg:pb-32">
@@ -71,62 +90,32 @@ export default function CollectionsPageContent() {
         <Container>
           <Breadcrumb
             items={[
-              { label: "Accueil", href: "/" },
-              { label: "Collections", href: "#", current: true },
+              { label: tCommon("home"), href: "/" },
+              { label: t("title"), href: "#", current: true },
             ]}
           />
 
-          <div className="mt-10 grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+          <div className="mt-10 max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 32 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-4xl"
             >
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#588b76]">
-                Collections signature
+                {t("eyebrow")}
               </p>
               <h1 className="mt-6 font-serif text-5xl font-semibold leading-[0.94] tracking-[-0.055em] text-[#1e2a25] sm:text-6xl lg:text-8xl">
-                Explorez les familles du parfum.
+                {t("title")}
               </h1>
               <p className="mt-8 max-w-2xl text-base leading-8 text-[var(--color-muted)] sm:text-lg lg:text-xl lg:leading-9">
-                Des sélections éditoriales pensées pour chaque humeur, chaque saison
-                et chaque signature personnelle.
+                {t("description")}
               </p>
               <Link
-                href="/parfums"
+                href="/perfumes"
                 className="mt-10 inline-flex rounded-full bg-[#588b76] px-8 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white shadow-[0_18px_45px_rgba(88,139,118,0.26)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#4d7c69]"
               >
-                Découvrir les parfums
+                {tCart("emptyCta")}
               </Link>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, x: 30 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-              className="relative min-h-[24rem] overflow-hidden rounded-[2.25rem] border border-[#1e2a25]/10 bg-gradient-to-br from-[#588b76]/18 via-white/70 to-[#f6f6df] p-8 shadow-[0_30px_90px_rgba(30,42,37,0.12)]"
-            >
-              <div className="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-[#588b76]/20 blur-3xl" />
-              <div className="absolute bottom-8 right-8 h-52 w-36 rounded-[2.5rem] border border-white/70 bg-white/35 shadow-[0_25px_70px_rgba(88,139,118,0.2)] backdrop-blur" />
-              <div className="relative z-10 max-w-sm">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#588b76]">
-                  Collection mise en avant
-                </p>
-                <h2 className="mt-5 font-serif text-4xl font-semibold leading-none text-[#1e2a25]">
-                  Oud & Bois Précieux
-                </h2>
-                <p className="mt-5 text-sm leading-7 text-[var(--color-muted)]">
-                  Une sélection intense et magnétique, construite autour du oud, du
-                  cèdre, du santal et des résines chaudes.
-                </p>
-                <Link
-                  href="/perfumes?category=oriental"
-                  className="mt-8 inline-flex rounded-full border border-[#588b76]/35 bg-white/70 px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#588b76] backdrop-blur transition-all duration-300 hover:bg-white"
-                >
-                  Voir la collection
-                </Link>
-              </div>
             </motion.div>
           </div>
         </Container>
@@ -134,26 +123,17 @@ export default function CollectionsPageContent() {
 
       <section className="px-4 pb-20 sm:px-6 sm:pb-24 lg:px-8 lg:pb-32">
         <Container>
-          <div className="mb-12 max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#588b76]">
-              Choisir par univers
-            </p>
-            <h2 className="mt-4 font-serif text-4xl font-semibold tracking-[-0.04em] text-[#1e2a25] sm:text-5xl">
-              Six collections premium.
-            </h2>
-          </div>
-
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {collections.map((collection, index) => (
               <motion.div
-                key={collection.title}
+                key={collection.id}
                 initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.55, delay: index * 0.06 }}
               >
                 <Link
-                  href={collection.href}
+                  href={collection.href as never}
                   className="group relative block min-h-[23rem] overflow-hidden rounded-[2rem] border border-[#1e2a25]/10 bg-white shadow-[0_22px_60px_rgba(30,42,37,0.08)]"
                 >
                   <div
@@ -166,13 +146,13 @@ export default function CollectionsPageContent() {
                       style={{ backgroundColor: collection.accent }}
                     />
                     <h3 className="font-serif text-4xl font-semibold tracking-[-0.04em]">
-                      {collection.title}
+                      {titleMap[collection.id]}
                     </h3>
                     <p className="mt-4 max-w-sm text-sm leading-7 text-white/82">
-                      {collection.description}
+                      {descMap[collection.id]}
                     </p>
                     <span className="mt-7 inline-flex w-fit rounded-full bg-white/16 px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-white backdrop-blur transition-all duration-300 group-hover:bg-white group-hover:text-[#588b76]">
-                      Explorer
+                      {t("cta")}
                     </span>
                   </div>
                 </Link>
@@ -187,14 +167,17 @@ export default function CollectionsPageContent() {
           <div className="mb-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#588b76]">
-                Aperçu produit
+                {t("preview")}
               </p>
               <h2 className="mt-4 font-serif text-4xl font-semibold tracking-[-0.04em] text-[#1e2a25] sm:text-5xl">
-                Les pièces à essayer.
+                {t("featured")}
               </h2>
             </div>
-            <Link href="/parfums" className="text-sm font-semibold uppercase tracking-[0.16em] text-[#588b76]">
-              Voir tout →
+            <Link
+              href="/perfumes"
+              className="text-sm font-semibold uppercase tracking-[0.16em] text-[#588b76]"
+            >
+              {t("viewAll")} →
             </Link>
           </div>
 
@@ -209,7 +192,10 @@ export default function CollectionsPageContent() {
                 className="min-w-[78%] snap-start sm:min-w-[45%] lg:min-w-[23%]"
               >
                 <Link
-                  href={`/perfumes/${product.id}`}
+                  href={{
+                    pathname: "/perfumes/[slug]",
+                    params: { slug: product.id },
+                  }}
                   className="group block overflow-hidden rounded-[1.75rem] border border-[#1e2a25]/10 bg-white p-4 shadow-[0_18px_45px_rgba(30,42,37,0.07)]"
                 >
                   <div

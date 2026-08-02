@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { PerfumeProduct } from "../ProductGrid/products";
 import AddToCartButton from "@/components/cart/AddToCartButton/AddToCartButton";
 
@@ -12,6 +13,8 @@ type ProductCardProps = {
 };
 
 export default function ProductCard({ product, index }: ProductCardProps) {
+  const t = useTranslations("Product");
+  const tPerfumes = useTranslations("Perfumes");
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   return (
@@ -48,7 +51,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           type="button"
           onClick={() => setIsWishlisted(!isWishlisted)}
           className="absolute right-3 top-3 inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-white/90 text-[#588b76] shadow-sm backdrop-blur transition-all duration-300 hover:scale-105 hover:bg-white active:scale-95"
-          aria-label={isWishlisted ? "Retirer des favoris" : "Ajouter aux favoris"}
+          aria-label={isWishlisted ? t("wishlistRemove") : t("wishlistAdd")}
         >
           <svg
             viewBox="0 0 24 24"
@@ -107,12 +110,14 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             name: product.name,
             brand: product.brand,
             price: product.price,
+            image: product.image,
+            oldPrice: product.oldPrice,
             tone: product.tone,
           }}
           size="sm"
         >
           <span className="mr-1.5 text-sm">🛍️</span>
-          <span className="font-medium">Ajouter</span>
+          <span className="font-medium">{tPerfumes("addToCart")}</span>
         </AddToCartButton>
       </div>
 
@@ -120,7 +125,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       <a
         href={`/perfumes/${product.id}`}
         className="absolute inset-0 z-10"
-        aria-label={`Voir les détails de ${product.name}`}
+        aria-label={t("viewDetails", { name: product.name })}
       >
         <span className="sr-only">Voir les détails</span>
       </a>

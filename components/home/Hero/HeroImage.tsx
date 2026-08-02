@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { HeroSlide } from "./heroSlides";
 
 type HeroImageProps = {
@@ -19,10 +20,15 @@ export default function HeroImage({
   direction,
   onSelectSlide,
 }: HeroImageProps) {
+  const t = useTranslations("Hero");
+  const bottleTitle = t(`slides.${slide.id}.bottleTitle`);
+  const bottleCaption = t(`slides.${slide.id}.bottleCaption`);
+  const imageBadge = t(`slides.${slide.id}.imageBadge`);
+
   return (
     <div
       className="relative mx-auto w-full max-w-[11rem] sm:max-w-md lg:max-w-2xl"
-      aria-label={`Flacon de parfum ${slide.bottleTitle}`}
+      aria-label={bottleTitle}
     >
       <div
         className="absolute inset-x-3 top-8 h-32 rounded-full blur-3xl sm:inset-x-8 sm:top-10 sm:h-72"
@@ -61,7 +67,7 @@ export default function HeroImage({
             >
               <Image
                 src={slide.image}
-                alt={`Flacon premium ${slide.bottleTitle}`}
+                alt={bottleTitle}
                 fill
                 priority
                 sizes="(min-width: 1024px) 38vw, (min-width: 640px) 34vw, 42vw"
@@ -73,63 +79,40 @@ export default function HeroImage({
           </motion.div>
         </AnimatePresence>
 
-        <div className="absolute left-3 top-3 rounded-xl border border-white/70 bg-white/45 px-2.5 py-2 shadow-[0_18px_45px_rgba(30,42,37,0.08)] backdrop-blur-xl sm:left-8 sm:top-10 sm:rounded-2xl sm:px-4 sm:py-3">
+        <div className="absolute start-3 top-3 rounded-xl border border-white/70 bg-white/45 px-2.5 py-2 shadow-[0_18px_45px_rgba(30,42,37,0.08)] backdrop-blur-xl sm:start-8 sm:top-10 sm:rounded-2xl sm:px-4 sm:py-3">
           <p
             className="text-[0.52rem] font-semibold uppercase tracking-[0.16em] sm:text-[0.65rem] sm:tracking-[0.24em]"
             style={{ color: slide.accent }}
           >
-            {slide.imageBadge}
+            {imageBadge}
           </p>
-          <p className="mt-0.5 font-serif text-xs font-semibold text-[#1e2a25] sm:mt-1 sm:text-lg">
-            {slide.bottleCaption}
+          <p className="mt-1 font-serif text-sm font-semibold text-[#1e2a25] sm:mt-2 sm:text-xl">
+            {bottleTitle}
           </p>
-        </div>
-
-        <div className="absolute bottom-3 right-3 rounded-xl border border-white/70 bg-white/45 px-2.5 py-2 text-right shadow-[0_18px_45px_rgba(30,42,37,0.08)] backdrop-blur-xl sm:bottom-10 sm:right-8 sm:rounded-2xl sm:px-4 sm:py-3">
-          <p
-            className="text-[0.52rem] font-semibold uppercase tracking-[0.16em] sm:text-[0.65rem] sm:tracking-[0.24em]"
-            style={{ color: slide.accent }}
-          >
-            Maroc
-          </p>
-          <p className="mt-0.5 font-serif text-xs font-semibold text-[#1e2a25] sm:mt-1 sm:text-lg">
-            Livraison soignée
+          <p className="mt-0.5 text-[0.6rem] text-[var(--color-muted)] sm:mt-1 sm:text-xs">
+            {bottleCaption}
           </p>
         </div>
-      </div>
 
-      <div className="mt-5 hidden grid-cols-4 gap-3 sm:grid">
-        {slides.map((item, index) => {
-          const isActive = index === activeIndex;
+        <div className="absolute inset-x-2 bottom-2 flex gap-1.5 sm:inset-x-6 sm:bottom-6 sm:gap-2">
+          {slides.map((item, index) => {
+            const isActive = index === activeIndex;
 
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => onSelectSlide(index)}
-              aria-label={`Afficher ${item.bottleTitle}`}
-              aria-current={isActive ? "true" : undefined}
-              className={`group relative overflow-hidden rounded-2xl border bg-white/55 p-2 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#588b76] ${
-                isActive ? "border-[#588b76]" : "border-white/70 hover:border-[#588b76]/40"
-              }`}
-            >
-              <span className="relative mx-auto block aspect-[4/3] w-full">
-                <Image
-                  src={item.image}
-                  alt=""
-                  fill
-                  sizes="120px"
-                  placeholder="blur"
-                  blurDataURL="data:image/gif;base64,R0lGODlhAQABAAAAACw="
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-              </span>
-              <span className="mt-1 block truncate text-center text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[#1e2a25]">
-                {item.bottleTitle}
-              </span>
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={item.id}
+                type="button"
+                aria-label={t(`slides.${item.id}.title`)}
+                aria-current={isActive ? "true" : undefined}
+                onClick={() => onSelectSlide(index)}
+                className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
+                  isActive ? "opacity-100" : "bg-[#1e2a25]/15 opacity-70"
+                }`}
+                style={isActive ? { backgroundColor: item.accent } : undefined}
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );

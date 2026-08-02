@@ -2,32 +2,18 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-
-const faqs = [
-  {
-    question: "Comment choisir un parfum sans le sentir ?",
-    answer:
-      "Décrivez-nous vos parfums préférés, votre style et les occasions d’utilisation. Nous vous recommandons une sélection adaptée à vos goûts.",
-  },
-  {
-    question: "Livrez-vous partout au Maroc ?",
-    answer:
-      "Oui, nous livrons dans les principales villes marocaines avec un suivi et une confirmation avant expédition.",
-  },
-  {
-    question: "Puis-je commander directement sur WhatsApp ?",
-    answer:
-      "Oui. Vous pouvez nous envoyer le nom du parfum, le volume souhaité et votre ville pour recevoir une confirmation rapide.",
-  },
-  {
-    question: "Les parfums sont-ils authentiques ?",
-    answer:
-      "Chaque sélection est vérifiée avec soin. Notre priorité est de proposer des fragrances fiables, élégantes et conformes à nos standards.",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function ContactFAQ() {
+  const t = useTranslations("Contact");
   const [openIndex, setOpenIndex] = useState(0);
+
+  const faqs = [
+    { question: t("faq1q"), answer: t("faq1a") },
+    { question: t("faq2q"), answer: t("faq2a") },
+    { question: t("faq3q"), answer: t("faq3a") },
+    { question: t("faq4q"), answer: t("faq4a") },
+  ];
 
   return (
     <section className="px-4 pb-20 sm:px-6 sm:pb-24 lg:px-8 lg:pb-32">
@@ -39,14 +25,13 @@ export default function ContactFAQ() {
           transition={{ duration: 0.6 }}
         >
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#588b76]">
-            Questions fréquentes
+            {t("faqEyebrow")}
           </p>
           <h2 className="mt-4 font-serif text-4xl font-semibold tracking-[-0.04em] text-[#1e2a25] sm:text-5xl">
-            Avant de nous écrire.
+            {t("faqTitle")}
           </h2>
           <p className="mt-5 max-w-xl text-sm leading-7 text-[var(--color-muted)] sm:text-base">
-            Les réponses rapides aux questions les plus courantes sur les conseils,
-            la commande et la livraison.
+            {t("faqSubtitle")}
           </p>
         </motion.div>
 
@@ -66,7 +51,7 @@ export default function ContactFAQ() {
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                  className="flex w-full items-center justify-between gap-6 px-6 py-5 text-left"
+                  className="flex w-full items-center justify-between gap-6 px-6 py-5 text-start"
                   aria-expanded={isOpen}
                 >
                   <span className="font-serif text-xl font-semibold text-[#1e2a25]">
@@ -83,9 +68,10 @@ export default function ContactFAQ() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{ duration: 0.25 }}
+                      className="overflow-hidden"
                     >
-                      <p className="px-6 pb-6 text-sm leading-7 text-[var(--color-muted)]">
+                      <p className="px-6 pb-5 text-sm leading-7 text-[var(--color-muted)]">
                         {faq.answer}
                       </p>
                     </motion.div>

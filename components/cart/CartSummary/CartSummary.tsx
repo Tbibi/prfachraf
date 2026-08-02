@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import { Link, useRouter } from "@/i18n/navigation";
 import Button from "@/components/ui/Button/Button";
 
 type CartSummaryProps = {
@@ -10,9 +12,18 @@ type CartSummaryProps = {
   itemCount: number;
 };
 
-export default function CartSummary({ subtotal, discount, total, itemCount }: CartSummaryProps) {
+export default function CartSummary({
+  subtotal,
+  discount,
+  total,
+  itemCount,
+}: CartSummaryProps) {
+  const t = useTranslations("Cart");
+  const tCommon = useTranslations("Common");
+  const router = useRouter();
   const shippingCost = total >= 300 ? 0 : 30;
   const finalTotal = total + shippingCost;
+  const plural = itemCount !== 1 ? "s" : "";
 
   return (
     <motion.div
@@ -21,96 +32,94 @@ export default function CartSummary({ subtotal, discount, total, itemCount }: Ca
       transition={{ duration: 0.4 }}
       className="space-y-4"
     >
-      {/* Order Summary */}
       <div className="sticky top-28 rounded-[1.5rem] border border-[#1e2a25]/10 bg-white/70 p-5 backdrop-blur-sm sm:p-6">
         <h2 className="mb-4 font-serif text-2xl font-semibold text-[#1e2a25]">
-          Résumé
+          {t("summary")}
         </h2>
 
         <div className="space-y-3">
-          {/* Subtotal */}
           <div className="flex justify-between text-sm">
             <span className="text-[var(--color-muted)]">
-              Sous-total ({itemCount} article{itemCount !== 1 ? 's' : ''})
+              {t("subtotalItems", { count: itemCount, plural })}
             </span>
-            <span className="font-medium text-[#1e2a25]">{subtotal} DH</span>
+            <span className="font-medium text-[#1e2a25]">
+              {subtotal} {tCommon("currency")}
+            </span>
           </div>
 
-          {/* Discount */}
           {discount > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-green-600">Réduction</span>
-              <span className="font-medium text-green-600">-{discount.toFixed(0)} DH</span>
+              <span className="text-green-600">{t("discount")}</span>
+              <span className="font-medium text-green-600">
+                -{discount.toFixed(0)} {tCommon("currency")}
+              </span>
             </div>
           )}
 
-          {/* Shipping */}
           <div className="flex justify-between text-sm">
-            <span className="text-[var(--color-muted)]">Livraison</span>
+            <span className="text-[var(--color-muted)]">{t("shipping")}</span>
             <span className="font-medium text-[#1e2a25]">
               {shippingCost === 0 ? (
-                <span className="text-green-600">Gratuite</span>
+                <span className="text-green-600">{t("freeShipping")}</span>
               ) : (
-                `${shippingCost} DH`
+                `${shippingCost} ${tCommon("currency")}`
               )}
             </span>
           </div>
 
-          {/* Free shipping notice */}
           {shippingCost > 0 && (
-            <div className="rounded-lg bg-blue-50 p-3 border border-blue-200">
+            <div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
               <p className="text-xs text-blue-700">
-                💡 Ajoutez {(300 - total).toFixed(0)} DH pour bénéficier de la livraison gratuite !
+                💡{" "}
+                {t("freeShippingHint", {
+                  amount: (300 - total).toFixed(0),
+                })}
               </p>
             </div>
           )}
 
-          {/* Divider */}
           <div className="border-t border-[#1e2a25]/10 pt-4">
             <div className="flex justify-between">
-              <span className="font-semibold text-[#1e2a25]">Total</span>
+              <span className="font-semibold text-[#1e2a25]">{t("total")}</span>
               <span className="font-serif text-xl font-semibold text-[#1e2a25]">
-                {finalTotal} DH
+                {finalTotal} {tCommon("currency")}
               </span>
             </div>
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="mt-6 hidden space-y-3 sm:block">
           <Button
             variant="primary"
-            className="w-full h-12 text-sm font-semibold"
-            onClick={() => window.location.href = '/checkout'}
+            className="h-12 w-full text-sm font-semibold"
+            onClick={() => router.push("/checkout")}
           >
-            Procéder au paiement
+            {t("checkout")}
           </Button>
         </div>
 
-        {/* Security & Guarantees */}
         <div className="mt-5 space-y-2 rounded-xl border border-[#588b76]/10 bg-gradient-to-r from-[#588b76]/5 to-transparent p-3 sm:p-4">
           <div className="flex items-center gap-2 text-xs text-[var(--color-muted)]">
             <span className="text-green-600">🔒</span>
-            <span>Paiement 100% sécurisé</span>
+            <span>{t("securePayment")}</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-[var(--color-muted)]">
             <span className="text-green-600">🚚</span>
-            <span>Livraison rapide partout au Maroc</span>
+            <span>{t("fastDelivery")}</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-[var(--color-muted)]">
             <span className="text-green-600">↩️</span>
-            <span>Retour gratuit sous 14 jours</span>
+            <span>{t("freeReturns")}</span>
           </div>
         </div>
 
-        {/* Continue Shopping */}
         <div className="mt-5 text-center">
-          <a
-            href="/parfums"
+          <Link
+            href="/perfumes"
             className="text-sm font-medium text-[#588b76] underline decoration-[#588b76]/30 underline-offset-4 transition-all duration-300 hover:decoration-[#588b76]"
           >
-            ← Continuer mes achats
-          </a>
+            {t("continueShopping")}
+          </Link>
         </div>
       </div>
     </motion.div>

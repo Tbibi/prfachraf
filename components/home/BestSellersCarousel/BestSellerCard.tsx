@@ -131,6 +131,7 @@ export default function BestSellerCard({ product, index }: BestSellerCardProps) 
             name: product.name,
             brand: product.brand,
             price: product.price,
+            image: product.image,
             tone: product.tone,
           }}
           size="md"

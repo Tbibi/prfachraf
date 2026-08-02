@@ -1,10 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { HeroSlide } from "./heroSlides";
 
 type HeroStatsProps = {
-  stats: HeroSlide["stats"];
+  stats: {
+    value: string;
+    label: string;
+  }[];
 };
 
 export default function HeroStats({ stats }: HeroStatsProps) {

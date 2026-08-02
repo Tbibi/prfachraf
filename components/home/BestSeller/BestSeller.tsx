@@ -1,7 +1,12 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import ProductCard from "./ProductCard";
 import { featuredProducts } from "./products";
 
 export default function BestSeller() {
+  const t = useTranslations("Home");
+
   return (
     <section
       id="parfums"
@@ -11,17 +16,16 @@ export default function BestSeller() {
       <div className="mx-auto max-w-[1440px]">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#588b76]">
-            Best-sellers
+            {t("featuredEyebrow")}
           </p>
           <h2
             id="best-seller-title"
             className="mt-4 font-serif text-4xl font-semibold tracking-[-0.04em] text-[#1e2a25] sm:text-5xl lg:text-6xl"
           >
-            Les parfums les plus demandés
+            {t("featuredTitle")}
           </h2>
           <p className="mt-5 text-base leading-8 text-[var(--color-muted)] sm:text-lg">
-            Découvrez une sélection premium de fragrances raffinées, choisies
-            pour leur élégance, leur tenue et leur sillage mémorable.
+            {t("featuredDescription")}
           </p>
         </div>
 

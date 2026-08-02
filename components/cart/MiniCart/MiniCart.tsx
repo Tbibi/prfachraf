@@ -2,8 +2,9 @@
 
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useCartStore, type CartItem } from "@/lib/stores/cartStore";
 import Button from "@/components/ui/Button/Button";
 
@@ -19,36 +20,35 @@ const createProductImage = (tone: { primary: string; secondary: string }, size =
     <rect x="${size * 0.25}" y="${size * 0.2}" width="${size * 0.5}" height="${size * 0.7}" rx="4" fill="url(#bottleGradient${tone.primary})"/>
     <rect x="${size * 0.2}" y="${size * 0.15}" width="${size * 0.6}" height="${size * 0.15}" rx="2" fill="${tone.primary}" opacity="0.6"/>
   </svg>`;
-  
+
   return `data:image/svg+xml;base64,${btoa(svgString)}`;
 };
 
 export default function MiniCart() {
-  const { items, isOpen, closeCart, updateQuantity, removeItem, getTotalItems, getTotalPrice } = useCartStore();
+  const { items, isOpen, closeCart, updateQuantity, removeItem, getTotalItems, getTotalPrice } =
+    useCartStore();
 
-  // Prevent body scroll when cart is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
-    
+
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
-  // Handle ESC key
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         closeCart();
       }
     };
-    
-    document.addEventListener('keydown', handleEsc);
-    return () => document.removeEventListener('keydown', handleEsc);
+
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
   }, [isOpen, closeCart]);
 
   const totalItems = getTotalItems();
@@ -58,7 +58,6 @@ export default function MiniCart() {
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -67,15 +66,14 @@ export default function MiniCart() {
             className="fixed inset-0 z-[9998] bg-black/50 backdrop-blur-sm"
           />
 
-          {/* Desktop Cart - Slide from right */}
           <motion.div
-            initial={{ x: '100%' }}
+            initial={{ x: "100%" }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 z-[9999] h-full w-full max-w-md bg-white shadow-2xl flex flex-col hidden sm:flex"
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed end-0 top-0 z-[9999] hidden h-full w-full max-w-md flex-col bg-white shadow-2xl sm:flex"
           >
-            <CartContent 
+            <CartContent
               items={items}
               totalItems={totalItems}
               totalPrice={totalPrice}
@@ -85,27 +83,24 @@ export default function MiniCart() {
             />
           </motion.div>
 
-          {/* Mobile Cart - Slide from bottom */}
           <motion.div
-            initial={{ y: '100%' }}
+            initial={{ y: "100%" }}
             animate={{ y: 0 }}
-            exit={{ y: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed bottom-0 left-0 z-[9999] h-[85vh] w-full bg-white shadow-2xl flex flex-col sm:hidden rounded-t-3xl"
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-x-0 bottom-0 z-[9999] flex h-[85vh] w-full flex-col rounded-t-3xl bg-white shadow-2xl sm:hidden"
           >
-            {/* Mobile Handle */}
             <div className="flex justify-center py-3">
-              <div className="h-1.5 w-12 rounded-full bg-gray-200"></div>
+              <div className="h-1.5 w-12 rounded-full bg-gray-200" />
             </div>
-            
-            <CartContent 
+
+            <CartContent
               items={items}
               totalItems={totalItems}
               totalPrice={totalPrice}
               updateQuantity={updateQuantity}
               removeItem={removeItem}
               closeCart={closeCart}
-              isMobile={true}
             />
           </motion.div>
         </>
@@ -121,57 +116,57 @@ type CartContentProps = {
   updateQuantity: (id: string, quantity: number) => void;
   removeItem: (id: string) => void;
   closeCart: () => void;
-  isMobile?: boolean;
 };
 
-function CartContent({ 
-  items, 
-  totalItems, 
-  totalPrice, 
-  updateQuantity, 
-  removeItem, 
+function CartContent({
+  items,
+  totalItems,
+  totalPrice,
+  updateQuantity,
+  removeItem,
   closeCart,
 }: CartContentProps) {
+  const t = useTranslations("Cart");
+  const tCommon = useTranslations("Common");
+  const router = useRouter();
+  const plural = totalItems !== 1 ? "s" : "";
+
   return (
     <>
-      {/* Header */}
       <div className="flex items-center justify-between border-b border-[#1e2a25]/10 p-6">
         <div>
           <h2 className="font-serif text-xl font-semibold text-[#1e2a25]">
-            Panier ({totalItems})
+            {t("miniTitle")} ({totalItems})
           </h2>
-          <p className="text-sm text-[var(--color-muted)] mt-1">
-            {totalItems} article{totalItems !== 1 ? 's' : ''}
+          <p className="mt-1 text-sm text-[var(--color-muted)]">
+            {t("itemCount", { count: totalItems, plural })}
           </p>
         </div>
         <button
           onClick={closeCart}
-          className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--color-muted)] hover:bg-[#1e2a25]/5 hover:text-[#1e2a25] transition-colors duration-300"
-          aria-label="Fermer le panier"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--color-muted)] transition-colors duration-300 hover:bg-[#1e2a25]/5 hover:text-[#1e2a25]"
+          aria-label={t("close")}
         >
           ✕
         </button>
       </div>
 
-      {/* Cart Items */}
       {items.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
           <div className="mb-4 text-6xl text-[var(--color-muted)]">🛍️</div>
           <h3 className="mb-2 font-serif text-xl font-semibold text-[#1e2a25]">
-            Votre panier est vide
+            {t("miniEmpty")}
           </h3>
-          <p className="text-[var(--color-muted)] mb-6">
-            Découvrez nos parfums d&apos;exception
-          </p>
+          <p className="mb-6 text-[var(--color-muted)]">{t("emptyDescription")}</p>
           <Button
             variant="primary"
             onClick={() => {
               closeCart();
-              window.location.href = '/parfums';
+              router.push("/perfumes");
             }}
             className="px-6"
           >
-            Découvrir nos parfums
+            {t("miniEmptyCta")}
           </Button>
         </div>
       ) : (
@@ -184,10 +179,9 @@ function CartContent({
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="flex gap-4 rounded-xl bg-gradient-to-r from-[#f6f6df]/20 to-transparent p-4 border border-[#1e2a25]/5"
+                  className="flex gap-4 rounded-xl border border-[#1e2a25]/5 bg-gradient-to-r from-[#f6f6df]/20 to-transparent p-4"
                 >
-                  {/* Product Image */}
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <div className="h-16 w-12 overflow-hidden rounded-lg bg-gradient-to-br from-white/40 to-gray-50/60 p-2">
                       <Image
                         src={createProductImage(item.tone, 48)}
@@ -200,26 +194,27 @@ function CartContent({
                     </div>
                   </div>
 
-                  {/* Product Info */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-[#1e2a25] text-sm leading-tight line-clamp-1">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="line-clamp-1 text-sm font-medium leading-tight text-[#1e2a25]">
                       {item.name}
                     </h3>
-                    <p className="text-xs text-[var(--color-muted)] mt-0.5">{item.brand}</p>
-                    {item.volume && (
-                      <p className="text-xs text-[var(--color-muted)]">{item.volume}</p>
-                    )}
-                    
-                    <div className="flex items-center justify-between mt-2">
-                      <span className="font-semibold text-[#1e2a25] text-sm">
-                        {item.price} DH
+                    <p className="mt-0.5 text-xs text-[var(--color-muted)]">{item.brand}</p>
+                    {item.volume ? (
+                      <p className="text-xs text-[var(--color-muted)]">
+                        {t("volume", { volume: item.volume })}
+                      </p>
+                    ) : null}
+
+                    <div className="mt-2 flex items-center justify-between">
+                      <span className="text-sm font-semibold text-[#1e2a25]">
+                        {item.price} {tCommon("currency")}
                       </span>
-                      
-                      {/* Quantity Controls */}
+
                       <div className="flex items-center rounded-full border border-[#1e2a25]/10 bg-white">
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
                           className="flex h-7 w-7 items-center justify-center text-xs font-semibold text-[#588b76] transition-colors duration-300 hover:bg-[#588b76]/5"
+                          aria-label={t("decreaseQty", { name: item.name })}
                         >
                           -
                         </button>
@@ -229,6 +224,7 @@ function CartContent({
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           className="flex h-7 w-7 items-center justify-center text-xs font-semibold text-[#588b76] transition-colors duration-300 hover:bg-[#588b76]/5"
+                          aria-label={t("increaseQty", { name: item.name })}
                         >
                           +
                         </button>
@@ -236,11 +232,10 @@ function CartContent({
                     </div>
                   </div>
 
-                  {/* Remove Button */}
                   <button
                     onClick={() => removeItem(item.id)}
-                    className="flex-shrink-0 text-[var(--color-muted)] hover:text-red-500 transition-colors duration-300 p-1"
-                    aria-label={`Supprimer ${item.name}`}
+                    className="shrink-0 p-1 text-[var(--color-muted)] transition-colors duration-300 hover:text-red-500"
+                    aria-label={t("remove", { name: item.name })}
                   >
                     <span className="text-sm">🗑️</span>
                   </button>
@@ -249,33 +244,27 @@ function CartContent({
             </div>
           </div>
 
-          {/* Footer */}
           <div className="border-t border-[#1e2a25]/10 p-6">
-            {/* Subtotal */}
-            <div className="flex justify-between items-center mb-4">
-              <span className="font-medium text-[#1e2a25]">Sous-total</span>
+            <div className="mb-4 flex items-center justify-between">
+              <span className="font-medium text-[#1e2a25]">{t("subtotal")}</span>
               <span className="font-serif text-xl font-semibold text-[#1e2a25]">
-                {totalPrice} DH
+                {totalPrice} {tCommon("currency")}
               </span>
             </div>
 
-            {/* Action Buttons */}
             <div className="space-y-3">
               <Link href="/cart" onClick={closeCart}>
-                <Button
-                  variant="primary"
-                  className="w-full h-12 text-sm font-semibold"
-                >
-                  Voir le panier
+                <Button variant="primary" className="h-12 w-full text-sm font-semibold">
+                  {t("viewCart")}
                 </Button>
               </Link>
-              
+
               <Button
                 variant="outline"
                 onClick={closeCart}
-                className="w-full h-12 text-sm font-semibold"
+                className="h-12 w-full text-sm font-semibold"
               >
-                Continuer mes achats
+                {tCommon("continueShopping")}
               </Button>
             </div>
           </div>

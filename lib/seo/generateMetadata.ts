@@ -1,29 +1,53 @@
 import type { Metadata } from "next";
 import type { PerfumeProduct } from "@/components/perfumes/ProductGrid/products";
-import { seoCollections, seoConfig, seoPages } from "./config";
-import { createSeoMetadata } from "./seo";
+import { getTranslations } from "next-intl/server";
+import { getPathname } from "@/i18n/navigation";
+import { locales, type AppLocale } from "@/i18n/routing";
+import { seoCollections } from "./config";
+import { createSeoMetadata, getAbsoluteUrl } from "./seo";
+import { generateLocalizedPageMetadata } from "./localizedMetadata";
 
-export type SeoPageKey = keyof typeof seoPages;
+export type SeoCollectionKey = keyof typeof seoCollections;
 
-export function generateSiteMetadata(): Metadata {
-  return createSeoMetadata({
-    title: seoConfig.siteName,
-    description:
-      "Achraf Parfums propose des parfums premium, élégants et authentiques pour homme et femme au Maroc.",
-    path: "/",
-    keywords: ["Achraf Parfums Maroc", "parfumerie luxe", "parfum premium"],
+export async function generatePageMetadata(
+  page: Parameters<typeof generateLocalizedPageMetadata>[1],
+  locale: string
+): Promise<Metadata> {
+  return generateLocalizedPageMetadata(locale, page);
+}
+
+export async function generateProductMetadata(
+  product: PerfumeProduct,
+  locale: string
+): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: "Product" });
+  const path = getPathname({
+    locale: locale as AppLocale,
+    href: {
+      pathname: "/perfumes/[slug]",
+      params: { slug: product.id },
+    },
   });
-}
 
-export function generatePageMetadata(page: SeoPageKey): Metadata {
-  return createSeoMetadata(seoPages[page]);
-}
+  const languages = Object.fromEntries(
+    locales.map((item) => [
+      item,
+      getAbsoluteUrl(
+        getPathname({
+          locale: item,
+          href: {
+            pathname: "/perfumes/[slug]",
+            params: { slug: product.id },
+          },
+        })
+      ),
+    ])
+  );
 
-export function generateProductMetadata(product: PerfumeProduct): Metadata {
   return createSeoMetadata({
     title: product.name,
-    description: `Discover ${product.name}, a premium oriental perfume crafted for luxury fragrance lovers.`,
-    path: `/perfumes/${product.id}`,
+    description: `${t("description")}: ${product.name}. ${product.notes}`,
+    path,
     image: product.image,
     keywords: [
       product.name,
@@ -31,16 +55,11 @@ export function generateProductMetadata(product: PerfumeProduct): Metadata {
       product.category,
       product.badge,
       product.notes,
-      "parfum premium Maroc",
     ],
     type: "article",
+    locale,
+    languages,
   });
-}
-
-export type SeoCollectionKey = keyof typeof seoCollections;
-
-export function generateCollectionMetadata(collection: SeoCollectionKey): Metadata {
-  return createSeoMetadata(seoCollections[collection]);
 }
 
 export function getCollectionKeyFromSearchParams(searchParams: {
@@ -67,24 +86,43 @@ export function getCollectionKeyFromSearchParams(searchParams: {
   return null;
 }
 
-export function generateCollectionMetadataFromSearchParams(searchParams: {
-  category?: string | string[];
-  sort?: string | string[];
-}): Metadata {
+export async function generateCollectionMetadataFromSearchParams(
+  searchParams: {
+    category?: string | string[];
+    sort?: string | string[];
+  },
+  locale: string
+): Promise<Metadata> {
   const collection = getCollectionKeyFromSearchParams(searchParams);
 
   if (!collection) {
-    return generatePageMetadata("perfumes");
+    return generateLocalizedPageMetadata(locale, "perfumes");
   }
 
-  return generateCollectionMetadata(collection);
+  const collectionSeo = seoCollections[collection];
+  const basePath = getPathname({
+    locale: locale as AppLocale,
+    href: "/perfumes",
+  });
+  const query = collectionSeo.path.includes("?")
+    ? `?${collectionSeo.path.split("?")[1]}`
+    : "";
+
+  return createSeoMetadata({
+    title: collectionSeo.title,
+    description: collectionSeo.description,
+    path: `${basePath}${query}`,
+    keywords: collectionSeo.keywords,
+    locale,
+  });
 }
 
-export function generateNotFoundMetadata(): Metadata {
+export async function generateNotFoundMetadata(locale = "fr"): Promise<Metadata> {
   return createSeoMetadata({
-    title: "Page introuvable",
-    description: "La page demandée est introuvable sur Achraf Parfums.",
-    path: "/",
+    title: "404",
+    description: "Page not found",
+    path: `/${locale}`,
+    locale,
     robots: {
       index: false,
       follow: false,

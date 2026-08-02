@@ -2,19 +2,8 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-
-type CartItem = {
-  id: string;
-  productId: string;
-  name: string;
-  brand: string;
-  image: string;
-  volume: string;
-  price: number;
-  originalPrice: number;
-  quantity: number;
-  tone: { primary: string; secondary: string };
-};
+import { useTranslations } from "next-intl";
+import type { CartItem } from "@/lib/stores/cartStore";
 
 type CartItemsProps = {
   items: CartItem[];
@@ -39,12 +28,15 @@ const createProductImage = (tone: { primary: string; secondary: string }, size =
 };
 
 export default function CartItems({ items, onUpdateQuantity, onRemoveItem }: CartItemsProps) {
+  const t = useTranslations("Cart");
+  const tCommon = useTranslations("Common");
+
   return (
     <div className="space-y-4">
       <div className="overflow-hidden rounded-[1.5rem] border border-[#1e2a25]/10 bg-white/70 backdrop-blur-sm">
         <div className="border-b border-[#1e2a25]/10 px-4 py-4 sm:px-5 sm:py-5">
           <h2 className="font-serif text-xl font-semibold text-[#1e2a25] sm:text-2xl">
-            Articles ({items.length})
+            {t("articles", { count: items.length })}
           </h2>
         </div>
 
@@ -62,17 +54,17 @@ export default function CartItems({ items, onUpdateQuantity, onRemoveItem }: Car
                 <div className="shrink-0">
                   <div className="h-24 w-20 overflow-hidden rounded-[1rem] bg-gradient-to-br from-white/40 to-gray-50/60 p-2.5 sm:h-28 sm:w-24">
                     <Image
-                      src={createProductImage(item.tone, 80)}
+                      src={item.image || createProductImage(item.tone, 80)}
                       alt={item.name}
                       width={80}
                       height={96}
-                      unoptimized
+                      unoptimized={!item.image}
                       className="h-full w-full object-contain"
                     />
                   </div>
                 </div>
 
-                <div className="min-w-0 flex-1 pr-9">
+                <div className="min-w-0 flex-1 pe-9">
                   <div>
                     <h3 className="line-clamp-1 font-medium text-[#1e2a25]">
                       {item.name}
@@ -80,20 +72,22 @@ export default function CartItems({ items, onUpdateQuantity, onRemoveItem }: Car
                     <p className="mt-0.5 text-xs text-[var(--color-muted)] sm:text-sm">
                       {item.brand}
                     </p>
-                    <p className="text-xs text-[var(--color-muted)] sm:text-sm">
-                      Volume: {item.volume}
-                    </p>
+                    {item.volume ? (
+                      <p className="text-xs text-[var(--color-muted)] sm:text-sm">
+                        {t("volume", { volume: item.volume })}
+                      </p>
+                    ) : null}
                   </div>
 
                   <div className="mt-2 flex items-center gap-2">
                     <span className="text-sm font-semibold text-[#1e2a25] sm:text-base">
-                      {item.price} DH
+                      {item.price} {tCommon("currency")}
                     </span>
-                    {item.originalPrice > item.price && (
+                    {item.originalPrice != null && item.originalPrice > item.price ? (
                       <span className="text-xs text-[var(--color-muted)] line-through">
-                        {item.originalPrice} DH
+                        {item.originalPrice} {tCommon("currency")}
                       </span>
-                    )}
+                    ) : null}
                   </div>
 
                   <div className="mt-3 flex items-center justify-between gap-3">
@@ -103,7 +97,7 @@ export default function CartItems({ items, onUpdateQuantity, onRemoveItem }: Car
                         onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
                         disabled={item.quantity <= 1}
                         className="flex h-11 w-11 items-center justify-center rounded-full text-base font-semibold text-[#588b76] transition-colors duration-300 hover:bg-[#588b76]/5 disabled:opacity-50"
-                        aria-label={`Réduire la quantité de ${item.name}`}
+                        aria-label={t("decreaseQty", { name: item.name })}
                       >
                         -
                       </button>
@@ -115,18 +109,18 @@ export default function CartItems({ items, onUpdateQuantity, onRemoveItem }: Car
                         onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
                         disabled={item.quantity >= 10}
                         className="flex h-11 w-11 items-center justify-center rounded-full text-base font-semibold text-[#588b76] transition-colors duration-300 hover:bg-[#588b76]/5 disabled:opacity-50"
-                        aria-label={`Augmenter la quantité de ${item.name}`}
+                        aria-label={t("increaseQty", { name: item.name })}
                       >
                         +
                       </button>
                     </div>
 
-                    <div className="text-right">
+                    <div className="text-end">
                       <div className="text-sm font-semibold text-[#1e2a25]">
-                        {item.price * item.quantity} DH
+                        {item.price * item.quantity} {tCommon("currency")}
                       </div>
                       <div className="text-[0.68rem] text-[var(--color-muted)]">
-                        Total
+                        {t("total")}
                       </div>
                     </div>
                   </div>
@@ -135,8 +129,8 @@ export default function CartItems({ items, onUpdateQuantity, onRemoveItem }: Car
                 <button
                   type="button"
                   onClick={() => onRemoveItem(item.id)}
-                  className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-[#1e2a25]/5 text-[var(--color-muted)] transition-colors duration-300 hover:bg-red-50 hover:text-red-500"
-                  aria-label={`Supprimer ${item.name}`}
+                  className="absolute bottom-3 end-3 flex h-10 w-10 items-center justify-center rounded-full bg-[#1e2a25]/5 text-[var(--color-muted)] transition-colors duration-300 hover:bg-red-50 hover:text-red-500"
+                  aria-label={t("remove", { name: item.name })}
                 >
                   🗑️
                 </button>

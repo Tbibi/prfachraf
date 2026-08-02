@@ -1,38 +1,36 @@
 export type Category = {
-  id: string;
-  title: string;
-  href: string;
-  description: string;
+  id: "homme" | "femme" | "nouveautes" | "best-sellers";
+  href:
+    | {
+        pathname: "/perfumes";
+        query: { category: string };
+      }
+    | {
+        pathname: "/perfumes";
+        query: { sort: string };
+      };
   accent: string;
 };
 
 export const categories: Category[] = [
   {
     id: "homme",
-    title: "Perfumes Homme",
-    href: "/perfumes?category=homme",
-    description: "Sillages boisés, ambrés et puissants pour une signature élégante.",
+    href: { pathname: "/perfumes", query: { category: "homme" } },
     accent: "#588b76",
   },
   {
     id: "femme",
-    title: "Perfumes Femme",
-    href: "/perfumes?category=femme",
-    description: "Notes florales, musquées et raffinées pour une présence lumineuse.",
+    href: { pathname: "/perfumes", query: { category: "femme" } },
     accent: "#b9868f",
   },
   {
     id: "nouveautes",
-    title: "Nouveautés",
-    href: "/perfumes?sort=newest",
-    description: "Les dernières arrivées premium sélectionnées pour la saison.",
+    href: { pathname: "/perfumes", query: { sort: "newest" } },
     accent: "#9b6b45",
   },
   {
     id: "best-sellers",
-    title: "Best Sellers",
-    href: "/perfumes?sort=bestseller",
-    description: "Les parfums favoris de nos clients, choisis pour leur tenue.",
+    href: { pathname: "/perfumes", query: { sort: "bestseller" } },
     accent: "#1e2a25",
   },
 ];

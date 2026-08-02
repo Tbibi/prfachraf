@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import FiltersDrawer from "@/components/perfumes/FiltersDrawer/FiltersDrawer";
 import MobileHeader from "@/components/perfumes/MobileHeader/MobileHeader";
 import DesktopFilters from "@/components/perfumes/DesktopFilters/DesktopFilters";
@@ -126,6 +127,8 @@ function getCollectionKeyFromParams(category: string, sort: string) {
 }
 
 export default function PerfumesPage({ initialCategory, initialSort }: PerfumesPageProps) {
+  const t = useTranslations("Perfumes");
+  const tCommon = useTranslations("Common");
   const router = useRouter();
   const categoryParam = initialCategory;
   const sortParam = initialSort;
@@ -280,21 +283,20 @@ export default function PerfumesPage({ initialCategory, initialSort }: PerfumesP
           <Container>
             <Breadcrumb
               items={[
-                { label: "Accueil", href: "/" },
-                { label: "Parfums", href: "#", current: true },
+                { label: tCommon("home"), href: "/" },
+                { label: t("breadcrumbPerfumes"), href: "#", current: true },
               ]}
             />
 
             <div className="mt-6 max-w-4xl">
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#588b76]">
-                Collection parfum
+                {t("eyebrow")}
               </p>
               <h1 className="mt-4 font-serif text-4xl font-semibold leading-[0.95] tracking-[-0.05em] text-[#1e2a25] sm:text-5xl lg:text-6xl">
-                Nos Parfums
+                {t("title")}
               </h1>
               <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--color-muted)] sm:text-lg lg:leading-8">
-                Explorez une sélection inspirée des grandes maisons, entre élégance
-                florale, bois précieux, muscs propres et sillages ambrés.
+                {t("description")}
               </p>
             </div>
           </Container>

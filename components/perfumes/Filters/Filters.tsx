@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 const brands = [
   "Achraf Signature",
   "Maison Florale",
@@ -30,6 +32,7 @@ type FiltersProps = {
 };
 
 export default function Filters({ filters, onFiltersChange }: FiltersProps) {
+  const t = useTranslations("Perfumes");
   const handleBrandChange = (brand: string, checked: boolean) => {
     const newBrands = checked
       ? [...filters.brands, brand]
@@ -69,10 +72,10 @@ export default function Filters({ filters, onFiltersChange }: FiltersProps) {
       <div className="flex items-center justify-between gap-4 border-b border-[#1e2a25]/10 pb-5">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#588b76]">
-            Filtres
+            {t("filters")}
           </p>
           <h2 className="mt-2 font-serif text-2xl font-semibold text-[#1e2a25]">
-            Affiner
+            {t("filters")}
           </h2>
         </div>
         <button
@@ -80,7 +83,7 @@ export default function Filters({ filters, onFiltersChange }: FiltersProps) {
           onClick={handleReset}
           className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-muted)] transition-colors duration-300 hover:text-[#588b76]"
         >
-          Reset
+          {t("clearFilters")}
         </button>
       </div>
 

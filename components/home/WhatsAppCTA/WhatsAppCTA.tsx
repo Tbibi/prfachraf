@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-const whatsappMessage = encodeURIComponent(
-  "Bonjour Achraf Parfums, je souhaite recevoir des conseils pour choisir un parfum."
-);
+import { useTranslations } from "next-intl";
 
 export default function WhatsAppCTA() {
+  const t = useTranslations("Home");
+  const whatsappMessage = encodeURIComponent(t("whatsappMessage"));
+
   return (
     <section className="bg-[var(--color-background)] px-4 py-12 sm:px-6 lg:px-8">
       <motion.div
@@ -21,21 +21,20 @@ export default function WhatsAppCTA() {
           aria-hidden="true"
         />
         <div
-          className="absolute -right-20 -top-20 h-72 w-72 rounded-full border border-white/20 bg-white/10 backdrop-blur-2xl"
+          className="absolute -end-20 -top-20 h-72 w-72 rounded-full border border-white/20 bg-white/10 backdrop-blur-2xl"
           aria-hidden="true"
         />
 
         <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-center">
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#f6f6df]">
-              Conseil personnalisé
+              {t("whatsappEyebrow")}
             </p>
             <h2 className="mt-4 font-serif text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
-              Besoin d&apos;un parfum qui vous ressemble ?
+              {t("whatsappTitle")}
             </h2>
             <p className="mt-5 text-base leading-8 text-white/72 sm:text-lg">
-              Écrivez-nous sur WhatsApp et recevez une recommandation adaptée à
-              votre style, votre budget et l&apos;occasion.
+              {t("whatsappDescription")}
             </p>
           </div>
 
@@ -45,7 +44,7 @@ export default function WhatsAppCTA() {
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-full bg-[#f6f6df] px-8 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-[#1e2a25] shadow-[0_18px_45px_rgba(246,246,223,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_24px_60px_rgba(246,246,223,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6f6df]"
           >
-            Commander sur WhatsApp
+            {t("whatsappButton")}
           </a>
         </div>
       </motion.div>

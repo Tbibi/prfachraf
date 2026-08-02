@@ -46,6 +46,14 @@ html {
   scroll-behavior: smooth;
 }
 
+html[dir="rtl"] body {
+  font-family: var(--font-arabic), var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+html[dir="rtl"] .font-serif {
+  font-family: var(--font-arabic), var(--font-playfair-display), Georgia, serif;
+}
+
 body {
   min-height: 100vh;
   margin: 0;

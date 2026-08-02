@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
 import Button from "@/components/ui/Button/Button";
@@ -46,6 +48,7 @@ export default function FiltersDrawer({
   onApply, 
   onReset 
 }: FiltersDrawerProps) {
+  const t = useTranslations("Perfumes");
   
   // Prevent body scroll when drawer is open
   useEffect(() => {
@@ -121,9 +124,7 @@ export default function FiltersDrawer({
             {/* Header */}
             <div className="flex items-center justify-between border-b border-[#1e2a25]/10 p-6">
               <div>
-                <h2 className="font-serif text-xl font-semibold text-[#1e2a25]">
-                  Filtres
-                </h2>
+                <h2 className="font-serif text-xl font-semibold text-[#1e2a25]">{t("filters")}</h2>
                 <p className="text-sm text-[var(--color-muted)] mt-1">
                   Affiner votre recherche
                 </p>
@@ -246,7 +247,7 @@ export default function FiltersDrawer({
                   onClick={onReset}
                   className="flex-1 h-12"
                 >
-                  Réinitialiser
+                  {t("clearFilters")}
                 </Button>
                 <Button
                   variant="primary"

@@ -1,33 +1,40 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
-const features = [
+const featureKeys = [
   {
-    title: "Produits authentiques",
-    description: "Des parfums sélectionnés avec soin pour garantir qualité, tenue et élégance.",
+    title: "authentic",
+    description: "authenticDesc",
     icon: (
       <path d="M12 3l7 4v6c0 4.4-2.8 8.4-7 9-4.2-.6-7-4.6-7-9V7l7-4z" />
     ),
   },
   {
-    title: "Livraison rapide",
-    description: "Une expédition soignée partout au Maroc avec un suivi simple et réactif.",
-    icon: <path d="M3 7h11v10H3V7zm11 3h4l3 3v4h-7v-7zM7 20a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z" />,
+    title: "delivery",
+    description: "deliveryDesc",
+    icon: (
+      <path d="M3 7h11v10H3V7zm11 3h4l3 3v4h-7v-7zM7 20a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z" />
+    ),
   },
   {
-    title: "Paiement sécurisé",
-    description: "Une expérience d'achat fiable, transparente et pensée pour votre tranquillité.",
+    title: "payment",
+    description: "paymentDesc",
     icon: <path d="M6 10V8a6 6 0 1112 0v2m-1 0H7v11h10V10zm-5 4v3" />,
   },
   {
-    title: "Support client",
-    description: "Une assistance personnalisée pour vous aider à choisir la fragrance idéale.",
-    icon: <path d="M4 12a8 8 0 0116 0v5a3 3 0 01-3 3h-2m-8-8v4H5a1 1 0 01-1-1v-3zm13 0v4h2a1 1 0 001-1v-3h-3z" />,
+    title: "support",
+    description: "supportDesc",
+    icon: (
+      <path d="M4 12a8 8 0 0116 0v5a3 3 0 01-3 3h-2m-8-8v4H5a1 1 0 01-1-1v-3zm13 0v4h2a1 1 0 001-1v-3h-3z" />
+    ),
   },
-];
+] as const;
 
 export default function WhyChooseUs() {
+  const t = useTranslations("Home");
+
   return (
     <section
       aria-labelledby="why-choose-us-title"
@@ -36,22 +43,21 @@ export default function WhyChooseUs() {
       <div className="mx-auto max-w-[1440px]">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#588b76]">
-            Pourquoi nous choisir
+            {t("whyEyebrow")}
           </p>
           <h2
             id="why-choose-us-title"
             className="mt-4 font-serif text-4xl font-semibold tracking-[-0.04em] text-[#1e2a25] sm:text-5xl lg:text-6xl"
           >
-            Une expérience parfum premium
+            {t("whyHeading")}
           </h2>
           <p className="mt-5 text-base leading-8 text-[var(--color-muted)] sm:text-lg">
-            Achraf Parfums réunit authenticité, service attentif et livraison
-            fiable pour une expérience d&apos;achat élégante.
+            {t("whyDescription")}
           </p>
         </div>
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature, index) => (
+          {featureKeys.map((feature, index) => (
             <motion.article
               key={feature.title}
               initial={{ opacity: 0, y: 28 }}
@@ -79,10 +85,10 @@ export default function WhyChooseUs() {
                 </svg>
               </div>
               <h3 className="font-serif text-2xl font-semibold tracking-[-0.03em] text-[#1e2a25]">
-                {feature.title}
+                {t(feature.title)}
               </h3>
               <p className="mt-4 text-sm leading-7 text-[var(--color-muted)]">
-                {feature.description}
+                {t(feature.description)}
               </p>
             </motion.article>
           ))}

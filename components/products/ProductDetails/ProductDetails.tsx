@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { PerfumeProduct } from "@/components/perfumes/ProductGrid/products";
 import Badge from "@/components/ui/Badge/Badge";
 import Button from "@/components/ui/Button/Button";
@@ -19,6 +20,8 @@ const prices = {
 };
 
 export default function ProductDetails({ product }: ProductDetailsProps) {
+  const t = useTranslations("Product");
+  const tCart = useTranslations("Cart");
   const [selectedVolume, setSelectedVolume] = useState("100ml");
   const [quantity, setQuantity] = useState(1);
 
@@ -91,7 +94,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
       {/* Volume Selection */}
       <div>
         <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-[#1e2a25]">
-          Volume
+          {t("volume")}
         </h3>
         <div className="grid grid-cols-3 gap-3">
           {volumes.map((volume) => (
@@ -119,7 +122,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
       {/* Quantity */}
       <div>
         <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-[#1e2a25]">
-          Quantité
+          {t("quantity")}
         </h3>
         <div className="flex items-center gap-4">
           <div className="flex items-center rounded-full border border-[#1e2a25]/10 bg-white">
@@ -153,6 +156,8 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
             name: product.name,
             brand: product.brand,
             price: prices[selectedVolume as keyof typeof prices].current,
+            image: product.image,
+            oldPrice: prices[selectedVolume as keyof typeof prices].old,
             tone: product.tone,
           }}
           volume={selectedVolume}
@@ -164,24 +169,23 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
           className="w-full h-14 text-base font-semibold"
           onClick={() => window.open(whatsappLink, '_blank')}
         >
-          <span className="mr-2">💬</span>
-          Commander sur WhatsApp
+          <span className="me-2">💬</span>
+          {t("whatsappOrder")}
         </Button>
       </div>
 
-      {/* Additional Info */}
-      <div className="space-y-4 rounded-xl bg-gradient-to-r from-[#588b76]/5 to-transparent p-6 border border-[#588b76]/10">
+      <div className="space-y-4 rounded-xl border border-[#588b76]/10 bg-gradient-to-r from-[#588b76]/5 to-transparent p-6">
         <div className="flex items-center gap-3 text-sm">
           <span className="text-green-600">✓</span>
-          <span>Authenticité garantie</span>
+          <span>{tCart("securePayment")}</span>
         </div>
         <div className="flex items-center gap-3 text-sm">
           <span className="text-green-600">✓</span>
-          <span>Livraison rapide partout au Maroc</span>
+          <span>{tCart("fastDelivery")}</span>
         </div>
         <div className="flex items-center gap-3 text-sm">
           <span className="text-green-600">✓</span>
-          <span>Retour gratuit sous 14 jours</span>
+          <span>{tCart("freeReturns")}</span>
         </div>
       </div>
     </div>
