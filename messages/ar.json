@@ -362,9 +362,19 @@
     "deliveryExpress": "سريع",
     "paymentTitle": "الدفع",
     "paymentCod": "الدفع عند الاستلام",
-    "orderSummary": "ملخص الطلب",
-    "shippingCost": "التوصيل",
-    "free": "مجاني"
+    "summary": "الملخص",
+    "quantity": "الكمية",
+    "subtotal": "المجموع الفرعي",
+    "itemsLabel": "منتج{count, plural, =1 {} other {ات}}",
+    "shipping": "الشحن",
+    "freeShipping": "مجاني",
+    "freeShippingHint": "شحن مجاني من {amount} درهم مشتريات",
+    "total": "الإجمالي",
+    "secureOrder": "طلب آمن 100%",
+    "smsConfirmation": "تأكيد بالرسائل النصية",
+    "authenticityGuarantee": "ضمان الأصالة",
+    "estimatedDelivery": "التسليم المقدر",
+    "deliveryDate": "الثلاثاء 5 أغسطس 2026"
   },
   "Product": {
     "addToCart": "أضف إلى السلة",

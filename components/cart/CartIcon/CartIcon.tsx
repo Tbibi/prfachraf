@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useCartStore } from "@/lib/stores/cartStore";
 
@@ -10,7 +11,19 @@ type CartIconProps = {
 
 export default function CartIcon({ onClick, className = "" }: CartIconProps) {
   const { getTotalItems, openCart } = useCartStore();
-  const totalItems = getTotalItems();
+  const [hasHydrated, setHasHydrated] = useState(false);
+  const totalItems = hasHydrated ? getTotalItems() : 0;
+
+  useEffect(() => {
+    const finishHydration = () => setHasHydrated(true);
+
+    if (useCartStore.persist.hasHydrated()) {
+      finishHydration();
+      return;
+    }
+
+    return useCartStore.persist.onFinishHydration(finishHydration);
+  }, []);
 
   const handleClick = () => {
     if (onClick) {

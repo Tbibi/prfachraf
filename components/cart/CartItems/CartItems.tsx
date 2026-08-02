@@ -11,21 +11,8 @@ type CartItemsProps = {
   onRemoveItem: (id: string) => void;
 };
 
-const createProductImage = (tone: { primary: string; secondary: string }, size = 100) => {
-  const svgString = `<svg width="${size}" height="${size * 1.2}" viewBox="0 0 ${size} ${size * 1.2}" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="bottleGradient${tone.primary}" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:${tone.primary};stop-opacity:0.8" />
-        <stop offset="100%" style="stop-color:${tone.primary};stop-opacity:0.95" />
-      </linearGradient>
-    </defs>
-    <rect width="${size}" height="${size * 1.2}" fill="${tone.secondary}" opacity="0.1"/>
-    <rect x="${size * 0.25}" y="${size * 0.2}" width="${size * 0.5}" height="${size * 0.7}" rx="6" fill="url(#bottleGradient${tone.primary})"/>
-    <rect x="${size * 0.2}" y="${size * 0.15}" width="${size * 0.6}" height="${size * 0.15}" rx="3" fill="${tone.primary}" opacity="0.6"/>
-  </svg>`;
-  
-  return `data:image/svg+xml;base64,${btoa(svgString)}`;
-};
+// Fallback image for products without images
+const FALLBACK_IMAGE = "/images/niche.jpeg";
 
 export default function CartItems({ items, onUpdateQuantity, onRemoveItem }: CartItemsProps) {
   const t = useTranslations("Cart");
@@ -54,12 +41,12 @@ export default function CartItems({ items, onUpdateQuantity, onRemoveItem }: Car
                 <div className="shrink-0">
                   <div className="h-24 w-20 overflow-hidden rounded-[1rem] bg-gradient-to-br from-white/40 to-gray-50/60 p-2.5 sm:h-28 sm:w-24">
                     <Image
-                      src={item.image || createProductImage(item.tone, 80)}
+                      src={item.image || FALLBACK_IMAGE}
                       alt={item.name}
                       width={80}
                       height={96}
-                      unoptimized={!item.image}
                       className="h-full w-full object-contain"
+                      loading="lazy"
                     />
                   </div>
                 </div>

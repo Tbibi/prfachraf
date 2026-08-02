@@ -364,7 +364,20 @@
     "paymentCod": "Paiement à la livraison",
     "orderSummary": "Récapitulatif",
     "shippingCost": "Livraison",
-    "free": "Gratuite"
+    "free": "Gratuite",
+    "summary": "Récapitulatif",
+    "quantity": "Qté",
+    "subtotal": "Sous-total",
+    "itemsLabel": "article{count, plural, =1 {} other {s}}",
+    "shipping": "Livraison",
+    "freeShipping": "Gratuite",
+    "freeShippingHint": "Livraison gratuite dès {amount} DH d'achats",
+    "total": "Total",
+    "secureOrder": "Commande 100% sécurisée",
+    "smsConfirmation": "Confirmation par SMS",
+    "authenticityGuarantee": "Garantie authenticité",
+    "estimatedDelivery": "Livraison estimée",
+    "deliveryDate": "Mardi 5 août 2026"
   },
   "Product": {
     "addToCart": "Ajouter au panier",

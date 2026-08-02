@@ -362,9 +362,19 @@
     "deliveryExpress": "Express",
     "paymentTitle": "Payment",
     "paymentCod": "Cash on delivery",
-    "orderSummary": "Order summary",
-    "shippingCost": "Shipping",
-    "free": "Free"
+    "summary": "Summary",
+    "quantity": "Qty",
+    "subtotal": "Subtotal",
+    "itemsLabel": "item{count, plural, =1 {} other {s}}",
+    "shipping": "Shipping",
+    "freeShipping": "Free",
+    "freeShippingHint": "Free shipping from {amount} DH purchases",
+    "total": "Total",
+    "secureOrder": "100% secure order",
+    "smsConfirmation": "SMS confirmation",
+    "authenticityGuarantee": "Authenticity guarantee",
+    "estimatedDelivery": "Estimated delivery",
+    "deliveryDate": "Tuesday, August 5, 2026"
   },
   "Product": {
     "addToCart": "Add to cart",

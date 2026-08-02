@@ -1,34 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import Navbar from "@/components/layout/navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
 import CheckoutForm from "@/components/checkout/CheckoutForm/CheckoutForm";
 import OrderSummary from "@/components/checkout/OrderSummary/OrderSummary";
 import Breadcrumb from "@/components/ui/Breadcrumb/Breadcrumb";
 import Container from "@/components/ui/Container/Container";
-
-const orderItems = [
-  {
-    id: "1",
-    name: "Oud Royal",
-    brand: "Achraf Signature",
-    volume: "100ml",
-    price: 399,
-    quantity: 1,
-    tone: { primary: "#588b76", secondary: "#f6f6df" },
-  },
-  {
-    id: "2",
-    name: "Rose Privée",
-    brand: "Maison Florale",
-    volume: "50ml",
-    price: 249,
-    quantity: 2,
-    tone: { primary: "#b9868f", secondary: "#fff5f1" },
-  },
-];
+import { useCartStore } from "@/lib/stores/cartStore";
 
 type OrderData = {
   customer: {
@@ -50,6 +31,9 @@ type OrderData = {
 export default function CheckoutPage() {
   const t = useTranslations("Checkout");
   const tCommon = useTranslations("Common");
+  const router = useRouter();
+  const { items: cartItems, getTotalItems } = useCartStore();
+  const [hasHydrated, setHasHydrated] = useState(false);
   const [, setOrderData] = useState<OrderData>({
     customer: {
       firstName: "",
@@ -67,12 +51,48 @@ export default function CheckoutPage() {
     },
   });
 
-  const subtotal = orderItems.reduce(
+  // Handle hydration to avoid hydration mismatches
+  useEffect(() => {
+    const finishHydration = () => setHasHydrated(true);
+
+    if (useCartStore.persist.hasHydrated()) {
+      finishHydration();
+      return;
+    }
+
+    return useCartStore.persist.onFinishHydration(finishHydration);
+  }, []);
+
+  // Redirect to cart if no items
+  useEffect(() => {
+    if (hasHydrated && cartItems.length === 0) {
+      router.push("/cart");
+    }
+  }, [hasHydrated, cartItems.length, router]);
+
+  // Convert CartItem[] to OrderItem[] format for OrderSummary
+  const orderItems = cartItems.map(item => ({
+    id: item.id,
+    name: item.name,
+    brand: item.brand,
+    volume: item.volume || "100ml", // fallback if volume is undefined
+    price: item.price,
+    quantity: item.quantity,
+    image: item.image,
+    tone: item.tone,
+  }));
+
+  const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
   const shippingCost = subtotal >= 300 ? 0 : 30;
   const total = subtotal + shippingCost;
+
+  // Don't render until hydrated and cart has items
+  if (!hasHydrated || cartItems.length === 0) {
+    return null;
+  }
 
   const handleOrderSubmit = (data: OrderData) => {
     setOrderData(data);

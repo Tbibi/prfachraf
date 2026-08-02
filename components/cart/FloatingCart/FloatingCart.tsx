@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { usePathname } from "@/i18n/navigation";
@@ -12,16 +13,28 @@ export default function FloatingCart() {
   const tCommon = useTranslations("Common");
   const pathname = usePathname();
   const { isFloatingVisible, getTotalItems, getTotalPrice, openCart } = useCartStore();
+  const [hasHydrated, setHasHydrated] = useState(false);
 
-  const totalItems = getTotalItems();
-  const totalPrice = getTotalPrice();
+  useEffect(() => {
+    const finishHydration = () => setHasHydrated(true);
+
+    if (useCartStore.persist.hasHydrated()) {
+      finishHydration();
+      return;
+    }
+
+    return useCartStore.persist.onFinishHydration(finishHydration);
+  }, []);
+
+  const totalItems = hasHydrated ? getTotalItems() : 0;
+  const totalPrice = hasHydrated ? getTotalPrice() : 0;
   const plural = totalItems !== 1 ? "s" : "";
 
   if (hiddenRoutes.includes(pathname)) {
     return null;
   }
 
-  if (!isFloatingVisible || totalItems === 0) {
+  if (!hasHydrated || !isFloatingVisible || totalItems === 0) {
     return null;
   }
 

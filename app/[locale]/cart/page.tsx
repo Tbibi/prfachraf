@@ -51,9 +51,9 @@ export default function CartPage() {
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const discountAmount = subtotal * discount;
-  const total = subtotal - discountAmount;
-  const shippingCost = total >= 300 ? 0 : 30;
-  const finalTotal = total + shippingCost;
+  const discountedSubtotal = subtotal - discountAmount;
+  const shippingCost = discountedSubtotal >= 300 ? 0 : 30;
+  const finalTotal = discountedSubtotal + shippingCost;
   const plural = totalItems !== 1 ? "s" : "";
 
   return (
@@ -113,7 +113,7 @@ export default function CartPage() {
                 <CartSummary
                   subtotal={subtotal}
                   discount={discountAmount}
-                  total={total}
+                  total={discountedSubtotal}
                   itemCount={totalItems}
                 />
               </div>
